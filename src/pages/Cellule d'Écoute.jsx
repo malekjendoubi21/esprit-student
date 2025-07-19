@@ -4,59 +4,6 @@ import { Card, CardContent } from '@/components/ui/card.jsx';
 import { Heart, Phone, Mail, Clock, Shield, Users, ArrowLeft, MapPin } from 'lucide-react';
 
 export default function CelluleEcoutePage() {
-  const services = [
-    {
-      titre: "Écoute Psychologique",
-      description: "Soutien individuel avec des psychologues professionnels",
-      icon: Heart,
-      disponibilite: "Lun-Ven 8h-17h"
-    },
-    {
-      titre: "Orientation Académique",
-      description: "Conseil et accompagnement dans vos choix d'études",
-      icon: Users,
-      disponibilite: "Sur rendez-vous"
-    },
-    {
-      titre: "Gestion du Stress",
-      description: "Techniques de relaxation et gestion de l'anxiété",
-      icon: Shield,
-      disponibilite: "Ateliers hebdomadaires"
-    }
-  ];
-
-  const equipe = [
-    {
-      nom: "Dr. Amina Belgacem",
-      poste: "Psychologue Clinicienne",
-      specialite: "Psychologie des adolescents et jeunes adultes",
-      experience: "8 ans d'expérience",
-      disponibilite: "Lundi, Mercredi, Vendredi"
-    },
-    {
-      nom: "Dr. Karim Hamdi",
-      poste: "Conseiller d'Orientation",
-      specialite: "Orientation académique et professionnelle",
-      experience: "5 ans d'expérience",
-      disponibilite: "Mardi, Jeudi"
-    },
-    {
-      nom: "Sarah Trabelsi",
-      poste: "Assistante Sociale",
-      specialite: "Accompagnement social et familial",
-      experience: "6 ans d'expérience",
-      disponibilite: "Lundi à Vendredi"
-    }
-  ];
-
-  const horaires = [
-    { jour: "Lundi", heures: "8h00 - 17h00", type: "Consultation libre" },
-    { jour: "Mardi", heures: "8h00 - 17h00", type: "Sur rendez-vous" },
-    { jour: "Mercredi", heures: "8h00 - 17h00", type: "Consultation libre" },
-    { jour: "Jeudi", heures: "8h00 - 17h00", type: "Ateliers de groupe" },
-    { jour: "Vendredi", heures: "8h00 - 16h00", type: "Consultation libre" }
-  ];
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -85,46 +32,101 @@ export default function CelluleEcoutePage() {
           <div className="text-center">
             <Heart className="w-16 h-16 mx-auto mb-6 text-white" />
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Cellule d'Écoute
+              Espace d'Écoute et d'Orientation
             </h1>
-            <p className="text-xl mb-8 max-w-3xl mx-auto">
-              Un espace bienveillant pour votre bien-être psychologique et votre épanouissement personnel
+            <p className="text-xl mb-8 max-w-4xl mx-auto leading-relaxed">
+              Un espace confidentiel pour soutenir et orienter les étudiants. C'est un lieu où vous pouvez parler de vos doutes, de vos problèmes et trouver une orientation dans différents domaines (scolarité, stress/anxiété, tristesse, mal-être, etc.)
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3">
                 <Phone className="w-4 h-4 mr-2" />
-                Urgence 24h/24
+                +216 92 234 330
               </Button>
               <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3">
                 <Mail className="w-4 h-4 mr-2" />
-                Prendre RDV
+                Cellule.decoute@esprit.tn
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Description Section */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Notre Approche</h2>
+            <p className="text-lg text-gray-600 leading-relaxed mb-8">
+              La priorité est donnée au soutien de la parole et à l'écoute, ainsi qu'à l'initiation d'une réflexion personnelle, 
+              afin d'élaborer avec l'étudiant des réponses adaptées à chaque situation.
+            </p>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              À ce titre, et si nécessaire, des orientations vers différents partenaires peuvent être proposées, 
+              en facilitant et en accompagnant l'étudiant dans cette démarche.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Missions Section */}
+      <section className="py-16 bg-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Nos Services</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Nos Missions</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Accompagnement personnalisé et confidentiel pour votre bien-être
+              Six missions principales pour votre accompagnement et votre bien-être
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {services.map((service, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                numero: "1",
+                titre: "Liens avec les Alumni",
+                description: "Maintenir des liens forts entre les anciens étudiants et l'école",
+                icon: Users
+              },
+              {
+                numero: "2", 
+                titre: "Gestion des Réclamations",
+                description: "Recevoir les réclamations concernant les cours, la logistique et l'environnement scolaire",
+                icon: Mail
+              },
+              {
+                numero: "3",
+                titre: "Relation avec les Délégués",
+                description: "Être en relation avec les délégués de classes",
+                icon: Users
+              },
+              {
+                numero: "4",
+                titre: "Conseils et Orientations",
+                description: "Fournir des conseils et orientations aux étudiants",
+                icon: Heart
+              },
+              {
+                numero: "5",
+                titre: "Orientation Spécialisée",
+                description: "Orientation vers un praticien si nécessaire",
+                icon: Shield
+              },
+              {
+                numero: "6",
+                titre: "Mesures Préventives",
+                description: "Proposer des mesures préventives",
+                icon: Shield
+              }
+            ].map((mission, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6">
-                  <service.icon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-3">{service.titre}</h3>
-                  <p className="text-gray-600 mb-4">{service.description}</p>
-                  <div className="flex items-center justify-center text-sm text-blue-600">
-                    <Clock className="w-4 h-4 mr-1" />
-                    {service.disponibilite}
+                  <div className="flex items-start mb-4">
+                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold mr-3 flex-shrink-0">
+                      {mission.numero}
+                    </div>
+                    <mission.icon className="w-8 h-8 text-blue-600" />
                   </div>
+                  <h3 className="text-lg font-semibold mb-3 text-gray-900">{mission.titre}</h3>
+                  <p className="text-gray-600">{mission.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -132,37 +134,92 @@ export default function CelluleEcoutePage() {
         </div>
       </section>
 
-      {/* Confidentialité Section */}
-      <section className="py-16 bg-blue-50">
+      {/* Cadre de Fonctionnement Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Cadre de Fonctionnement</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Un fonctionnement basé sur l'adhésion volontaire et la confidentialité
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold mb-4 text-blue-600">Demande de Rendez-vous</h3>
+                <p className="text-gray-600 mb-4">
+                  Les étudiants en difficulté peuvent solliciter, par téléphone ou par mail, un rendez-vous avec la cellule d'écoute 
+                  en indiquant leurs coordonnées téléphoniques. Ils seront contactés et reçus dès que possible.
+                </p>
+                <div className="space-y-3">
+                  <div className="flex items-center text-gray-700">
+                    <Phone className="w-5 h-5 text-blue-600 mr-3" />
+                    <span className="font-medium">00216 92 234 330</span>
+                  </div>
+                  <div className="flex items-center text-gray-700">
+                    <Mail className="w-5 h-5 text-blue-600 mr-3" />
+                    <span className="font-medium">Cellule.decoute@esprit.tn</span>
+                  </div>
+                  <div className="flex items-start text-gray-700">
+                    <MapPin className="w-5 h-5 text-blue-600 mr-3 mt-0.5" />
+                    <span className="font-medium">Cellule d'écoute, RDC, Bloc A, ESPRIT El Ghazela</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-semibold mb-4 text-blue-600">Adhésion Volontaire</h3>
+                <p className="text-gray-600 mb-4">
+                  La cellule d'écoute fonctionne sur la base de l'adhésion volontaire des étudiants : 
+                  cette démarche doit rester libre et volontaire.
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-blue-800 mb-2">Principe Fondamental</h4>
+                  <p className="text-blue-700 text-sm">
+                    Aucune obligation, aucune contrainte. Votre démarche vers nous doit être personnelle et motivée 
+                    par votre propre volonté d'être accompagné.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Engagements Section */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <Shield className="w-16 h-16 text-blue-600 mx-auto mb-6" />
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Confidentialité Garantie</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Nos Engagements</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Tous nos entretiens sont strictement confidentiels et respectent le secret professionnel
+              Des garanties strictes pour votre confidentialité et votre accompagnement
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-8">
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-3 text-blue-600">Nos Engagements</h3>
-                <ul className="space-y-2 text-gray-600">
+                <h3 className="text-xl font-semibold mb-4 text-blue-600">Engagement des Membres</h3>
+                <ul className="space-y-3 text-gray-600">
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Écoute sans jugement
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Les informations et documents de la cellule sont réservés à ses membres
                   </li>
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Confidentialité absolue
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Aucune information ne figure dans le dossier médical ou administratif de l'étudiant
                   </li>
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Respect de votre rythme
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Devoir de confidentialité absolue pour chaque membre
                   </li>
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Accompagnement personnalisé
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Engagement à ne pas diffuser d'informations, pendant et après le traitement
                   </li>
                 </ul>
               </CardContent>
@@ -170,25 +227,94 @@ export default function CelluleEcoutePage() {
             
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-xl font-semibold mb-3 text-blue-600">Quand Nous Consulter ?</h3>
-                <ul className="space-y-2 text-gray-600">
+                <h3 className="text-xl font-semibold mb-4 text-blue-600">Engagement de l'Institution</h3>
+                <ul className="space-y-3 text-gray-600">
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Stress et anxiété
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Moyens techniques et organisationnels pour l'optimisation des actions
                   </li>
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Difficultés relationnelles
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Respect des plannings nécessaires au bon fonctionnement
                   </li>
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Problèmes familiaux
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Support institutionnel complet pour les membres de la cellule
                   </li>
                   <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3"></span>
-                    Orientation académique
+                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    Garantie de conditions optimales d'exercice
                   </li>
                 </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Principes Déontologiques Section */}
+      <section className="py-16 bg-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">Principes Déontologiques</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Des principes éthiques rigoureux pour garantir la qualité de notre accompagnement
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-3 text-blue-600">Confidentialité et Secret Médical</h3>
+                <p className="text-gray-600 mb-3">
+                  La confidentialité est essentielle pour l'efficacité du travail au sein de la cellule. 
+                  Elle concerne tous les membres de la cellule.
+                </p>
+                <p className="text-gray-600 text-sm">
+                  Les membres s'engagent à partager les informations uniquement avec les membres de la cellule, 
+                  lors des réunions d'analyse ou de travail restreint visant à trouver des solutions.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-3 text-blue-600">Engagement Transparent</h3>
+                <p className="text-gray-600">
+                  Tous nos engagements sont clairement définis et communiqués. 
+                  La transparence dans notre approche garantit une relation de confiance avec les étudiants.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-3 text-blue-600">Spécificité de la Demande</h3>
+                <p className="text-gray-600">
+                  Les membres de la cellule doivent se concentrer uniquement sur le domaine et la situation 
+                  liés à la demande, en respectant les limites de leur intervention.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="h-full">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-3 text-blue-600">Collaboration avec des Spécialistes</h3>
+                <p className="text-gray-600">
+                  Si besoin, des orientations vers différents partenaires peuvent être soutenues 
+                  en facilitant et en accompagnant l'étudiant dans cette démarche.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card className="md:col-span-2">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold mb-3 text-blue-600">Distanciation dans la Recherche de Solutions</h3>
+                <p className="text-gray-600">
+                  Les membres de la cellule s'engagent à améliorer globalement une situation difficile, 
+                  sans imposer une solution unique, en offrant une véritable aide à la personne concernée. 
+                  L'étudiant reste acteur de ses choix et de son parcours.
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -205,57 +331,73 @@ export default function CelluleEcoutePage() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-6">
-            {equipe.map((membre, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-800 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">
-                      {membre.nom.split(' ').map(n => n[0]).join('')}
-                    </span>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Zied SAIDI */}
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full">
+                  <img 
+                    src="/images/cellule/ziedsaidi.PNG" 
+                    alt="Zied SAIDI"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{display: 'none'}}>
+                    ZS
                   </div>
-                  <h3 className="text-lg font-semibold mb-1">{membre.nom}</h3>
-                  <p className="text-blue-600 font-medium mb-2">{membre.poste}</p>
-                  <p className="text-sm text-gray-600 mb-2">{membre.specialite}</p>
-                  <p className="text-sm text-gray-500 mb-2">{membre.experience}</p>
-                  <div className="text-xs text-blue-600">
-                    <Clock className="w-3 h-3 inline mr-1" />
-                    {membre.disponibilite}
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">Zied SAIDI</h3>
+                <p className="text-blue-600 font-medium mb-4">Cellule d'écoute</p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center text-sm text-gray-600">
+                    <Mail className="w-4 h-4 mr-2" />
+                    <span>zied.saidi@esprit.tn</span>
                   </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+                </div>
+                <div className="mt-4 bg-blue-50 p-3 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Spécialité:</strong> Écoute et orientation des étudiants
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
-      {/* Horaires Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Horaires d'Ouverture</h2>
-            <p className="text-xl text-gray-600">
-              Nous sommes là pour vous accompagner
-            </p>
-          </div>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                {horaires.map((horaire, index) => (
-                  <div key={index} className="flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0">
-                    <div className="flex items-center">
-                      <span className="font-semibold text-gray-900 w-20">{horaire.jour}</span>
-                      <span className="text-gray-600 ml-4">{horaire.heures}</span>
-                    </div>
-                    <span className="text-sm text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                      {horaire.type}
-                    </span>
+            {/* Safa BEN HAMMOU */}
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full">
+                  <img 
+                    src="/images/cellule/safa-benhammou.PNG" 
+                    alt="Safa BEN HAMMOU"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="w-full h-full bg-gradient-to-br from-blue-600 to-blue-800 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{display: 'none'}}>
+                    SB
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </div>
+                <h3 className="text-xl font-semibold mb-2 text-gray-900">Safa BEN HAMMOU</h3>
+                <p className="text-blue-600 font-medium mb-4">Psychologue</p>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center text-sm text-gray-600">
+                    <Mail className="w-4 h-4 mr-2" />
+                    <span>Safa.benhammou@esprit.tn</span>
+                  </div>
+                </div>
+                <div className="mt-4 bg-blue-50 p-3 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Spécialité:</strong> Accompagnement psychologique et soutien étudiant
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </section>
 
@@ -263,26 +405,34 @@ export default function CelluleEcoutePage() {
       <section className="py-16 bg-blue-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Contactez-Nous</h2>
+            <h2 className="text-3xl font-bold mb-4">Contactez la Cellule d'Écoute</h2>
             <p className="text-xl mb-8">
-              N'hésitez pas à nous contacter, nous sommes là pour vous aider
+              N'hésitez pas à nous contacter, nous sommes là pour vous accompagner dans la confidentialité
             </p>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
                 <Phone className="w-8 h-8 mx-auto mb-2" />
-                <p className="font-semibold">Urgence 24h/24</p>
-                <p>+216 70 250 000</p>
+                <p className="font-semibold">Téléphone</p>
+                <p>00216 92 234 330</p>
               </div>
               <div className="text-center">
                 <Mail className="w-8 h-8 mx-auto mb-2" />
                 <p className="font-semibold">Email</p>
-                <p>ecoute@esprit.tn</p>
+                <p>Cellule.decoute@esprit.tn</p>
               </div>
               <div className="text-center">
                 <MapPin className="w-8 h-8 mx-auto mb-2" />
                 <p className="font-semibold">Localisation</p>
-                <p>Bâtiment A, 1er étage</p>
+                <p>RDC, Bloc A, ESPRIT El Ghazela</p>
               </div>
+            </div>
+            
+            <div className="mt-12 bg-blue-700 rounded-lg p-6 max-w-2xl mx-auto">
+              <h3 className="text-xl font-bold mb-4">Rappel Important</h3>
+              <p className="text-blue-100">
+                La cellule d'écoute fonctionne sur la base de l'adhésion volontaire des étudiants. 
+                Votre démarche doit rester libre et volontaire. Toutes nos interventions sont strictement confidentielles.
+              </p>
             </div>
           </div>
         </div>

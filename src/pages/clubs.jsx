@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
-import { Users, Calendar, Award, Code, Music, Camera, Cpu, Globe, ArrowLeft, Search, Filter } from 'lucide-react';
+import { Users, Calendar, Award, Code, Music, Camera, Cpu, Globe, ArrowLeft, Search, Filter, X, Target, Trophy, BookOpen, Facebook } from 'lucide-react';
 
 export default function ClubsPage() {
   const [filtreCategorie, setFiltreCategorie] = useState('Tous');
   const [recherche, setRecherche] = useState('');
+  const [clubModal, setClubModal] = useState(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [showContactCard, setShowContactCard] = useState(false);
+  const contactCardRef = useRef(null);
+
+  // Gérer le clic en dehors de la card
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (contactCardRef.current && !contactCardRef.current.contains(event.target)) {
+        setShowContactCard(false);
+      }
+    }
+
+    if (showContactCard) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showContactCard]);
 
   const clubs = [
     {
@@ -13,11 +34,40 @@ export default function ClubsPage() {
       categorie: "Informatique",
       description: "Club dédié à l'informatique théorique et pratique, programming contests et recherche",
       membres: 45,
-      president: "Yassine Kouider",
-      email: "acm@esprit.tn",
+      president: "Dridi Chaher",
+      email: "esprit-club-acm@esprit.tn",
       fondation: "2015",
       activites: ["Programming Contest", "Workshops", "Conférences Tech"],
-      prochainEvent: "ACM Programming Contest - 15 Mars 2025"
+      prochainEvent: "ACM Programming Contest - 15 Mars 2025",
+      facebook: "https://www.facebook.com/acm.esprit",
+      detailsComplets: {
+        nomComplet: "ACM Esprit Student Chapter",
+        presentation: "Le club ACM Esprit Student Chapter est une antenne étudiante officielle de l'Association for Computing Machinery (ACM), la plus grande société scientifique dédiée à l'informatique dans le monde. Notre club se spécialise dans la programmation compétitive, avec des workshops hebdomadaires de problem solving qui permettent aux étudiants d'améliorer leurs compétences en algorithmique. En parallèle, nous proposons régulièrement des ateliers techniques sur des sujets variés tels que l'intelligence artificielle, le développement web, l'utilisation de Git, ou encore le framework Symfony.",
+        objectifs: [
+          "Approfondir les compétences des étudiants en algorithmique et en développement",
+          "Préparer les membres aux compétitions nationales et internationales",
+          "Créer un environnement dynamique d'échange et d'apprentissage"
+        ],
+        activitesDetaillees: [
+          "Workshops hebdomadaires de Problem Solving, couvrant différents sujets liés à la programmation compétitive",
+          "Série de workshops autour de l'intelligence artificielle (IA)",
+          "Formations ponctuelles sur des outils pratiques comme Git, Symfony, etc.",
+          "Organisation de compétitions, comme Solve It 2.0, dont la deuxième édition s'est tenue cette année",
+          "Participation active à des événements inter-facultés et à des compétitions telles que IEEEXtreme et TCPC"
+        ],
+        focusCompetition: "Nous préparons activement nos membres au TCPC (Tunisian Collegiate Programming Contest). Une bonne performance à cette compétition peut permettre aux étudiants de représenter la Tunisie à l'international, notamment en Égypte pour la phase régionale.",
+        valeurs: [
+          "Esprit de challenge",
+          "Apprentissage continu", 
+          "Partage des connaissances",
+          "Ouverture et entraide"
+        ],
+        images: [
+          "/images/club/acm/acm1.jpg",
+          "/images/club/acm/acm2.jpg",
+          "/images/club/acm/acm3.jpg"
+        ]
+      }
     },
     {
       nom: "ESPRIT Club YouRobot",
@@ -154,13 +204,13 @@ export default function ClubsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Button 
               variant="ghost" 
               onClick={() => window.history.back()}
-              className="flex items-center text-gray-600 hover:text-green-600"
+              className="flex items-center text-gray-600 hover:text-green-600 hover:bg-green-50"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Retour
@@ -169,8 +219,73 @@ export default function ClubsPage() {
               <img src="/images/logo.png" alt="ESPRIT" className="h-10 w-auto" />
               <span className="text-xl font-bold text-green-600">Clubs Étudiants</span>
             </div>
+            <Button 
+              onClick={() => setShowContactCard(!showContactCard)}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Award className="w-4 h-4 mr-2" />
+              Créer un Club
+            </Button>
           </div>
         </div>
+        
+        {/* Contact Card */}
+        {showContactCard && (
+          <div className="absolute top-full right-4 z-50 mt-2" ref={contactCardRef}>
+            <div className="bg-white rounded-lg shadow-xl border p-6 w-80">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Contact pour créer un club</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowContactCard(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              <div className="flex items-center mb-4">
+                <div className="w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-green-200">
+                  <img 
+                    src="/images/club/tasnim-ghorbel.jpg" 
+                    alt="Tasnim Ghorbel"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="w-full h-full bg-green-100 flex items-center justify-center text-green-600 font-bold text-lg" style={{display: 'none'}}>
+                    TG
+                  </div>
+                </div>
+                <div>
+                  <h4 className="text-lg font-semibold text-gray-900">Tasnim Ghorbel</h4>
+                  <p className="text-gray-600 text-sm">Responsable des clubs</p>
+                  <p className="text-gray-600 text-sm">Comité des étudiants</p>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex items-center p-3 bg-green-50 rounded-lg">
+                  <span className="text-lg mr-2">📞</span>
+                  <span className="text-gray-700 font-medium">90 011 892</span>
+                </div>
+                <div className="flex items-center p-3 bg-blue-50 rounded-lg">
+                  <span className="text-lg mr-2">✉️</span>
+                  <span className="text-gray-700 text-sm">Ghorbel.Tasnim@esprit.tn</span>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-xs text-gray-500 text-center">
+                  Contactez-la pour créer votre propre club étudiant
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -184,16 +299,7 @@ export default function ClubsPage() {
             <p className="text-xl mb-8 max-w-3xl mx-auto">
               Plus de 20 clubs actifs pour développer vos passions, compétences et créer des liens durables
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-3">
-                <Users className="w-4 h-4 mr-2" />
-                Rejoindre un Club
-              </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-3">
-                <Award className="w-4 h-4 mr-2" />
-                Créer un Club
-              </Button>
-            </div>
+       
           </div>
         </div>
       </section>
@@ -218,10 +324,9 @@ export default function ClubsPage() {
               {categories.map(categorie => (
                 <Button
                   key={categorie}
-                  variant={filtreCategorie === categorie ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => setFiltreCategorie(categorie)}
-                  className={filtreCategorie === categorie ? 'bg-green-600 hover:bg-green-700' : ''}
+                  className={filtreCategorie === categorie ? 'bg-green-600 hover:bg-green-700 text-white border-green-600' : 'border-gray-300 text-gray-700 hover:bg-gray-50 bg-white'}
                 >
                   {categorie}
                 </Button>
@@ -250,8 +355,19 @@ export default function ClubsPage() {
                 <CardContent className="p-6 flex flex-col h-full">
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center mr-3">
-                        <span className="text-white font-bold text-sm">
+                      <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center mr-3 overflow-hidden">
+                        {club.nom === "ESPRIT Club ACM" ? (
+                          <img 
+                            src="/images/club/acm/logo.jpg" 
+                            alt="ACM Logo"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <span className={`text-white font-bold text-sm ${club.nom === "ESPRIT Club ACM" ? 'hidden' : ''}`}>
                           {club.nom.split(' ')[0].substring(0, 2)}
                         </span>
                       </div>
@@ -300,10 +416,28 @@ export default function ClubsPage() {
                   </div>
 
                   <div className="flex gap-2 mt-auto">
-                    <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white">
-                      Rejoindre
-                    </Button>
-                    <Button variant="outline" className="flex-1">
+                    {club.facebook ? (
+                      <Button 
+                        className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={() => window.open(club.facebook, '_blank')}
+                      >
+                        <Facebook className="w-4 h-4 mr-2" />
+                        Facebook
+                      </Button>
+                    ) : (
+                      <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white">
+                        <Users className="w-4 h-4 mr-2" />
+                        Rejoindre
+                      </Button>
+                    )}
+                    <Button 
+                      className="flex-1 border-green-600 text-green-600 hover:bg-green-600 hover:text-white bg-white border"
+                      onClick={() => {
+                        if (club.detailsComplets) {
+                          setClubModal(club);
+                        }
+                      }}
+                    >
                       En savoir plus
                     </Button>
                   </div>
@@ -344,17 +478,206 @@ export default function ClubsPage() {
 
       {/* Call to Action */}
       <section className="py-16 bg-green-600 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold mb-4">Envie de Créer Votre Club ?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Vous avez une passion à partager ? Créez votre propre club et rassemblez une communauté autour de vos intérêts !
-          </p>
-          <Button className="bg-white text-green-600 hover:bg-gray-100 px-8 py-3">
-            <Award className="w-4 h-4 mr-2" />
-            Créer un Club
-          </Button>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Envie de Créer Votre Club ?</h2>
+            <p className="text-xl mb-8 max-w-2xl mx-auto">
+              Vous avez une passion à partager ? Créez votre propre club et rassemblez une communauté autour de vos intérêts !
+            </p>
+          
+          </div>
+          
+          {/* Contact Section */}
+          <div className="max-w-md mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-6 text-center">
+            <h3 className="text-xl font-semibold mb-4">Pour créer votre club, contactez :</h3>
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-white">
+                <img 
+                  src="/images/club/tasnim-ghorbel.jpg" 
+                  alt="Tasnim Ghorbel"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-full bg-white/20 flex items-center justify-center text-white font-bold text-lg" style={{display: 'none'}}>
+                  TG
+                </div>
+              </div>
+              <div className="text-left">
+                <h4 className="text-lg font-semibold">Tasnim Ghorbel</h4>
+                <p className="text-white/90 text-sm">Responsable des clubs</p>
+                <p className="text-white/90 text-sm">Comité des étudiants</p>
+              </div>
+            </div>
+            <div className="bg-white/10 rounded-lg p-3 space-y-2">
+              <p className="text-lg font-semibold">📞 90 011 892</p>
+              <p className="text-sm">✉️ Ghorbel.Tasnim@esprit.tn</p>
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* Modal des détails du club */}
+      {clubModal && (
+        <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
+          {/* Test de chargement d'image invisible */}
+          <img 
+            src="/images/club/acm/coveracm.jpg" 
+            alt="" 
+            style={{ display: 'none' }}
+            onLoad={() => setImageLoaded(true)}
+            onError={() => {
+              console.log('Erreur: Image coveracm.jpg non trouvée');
+              setImageLoaded(false);
+            }}
+          />
+          
+          {/* Background conditionnel */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: imageLoaded 
+                ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/club/acm/coveracm.jpg') center/cover no-repeat`
+                : 'linear-gradient(135deg, #059669 0%, #047857 100%)'
+            }}
+          ></div>
+          
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative z-10 shadow-2xl">
+            {/* Header du modal */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-2xl font-bold text-gray-900">{clubModal.detailsComplets.nomComplet}</h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setClubModal(null)}
+                className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
+
+            {/* Contenu du modal */}
+            <div className="p-6">
+              {/* Images du club */}
+              <div className="grid md:grid-cols-3 gap-4 mb-6">
+                {clubModal.detailsComplets.images.map((image, index) => (
+                  <div key={index} className="aspect-video rounded-lg overflow-hidden">
+                    <img 
+                      src={image} 
+                      alt={`${clubModal.nom} - Image ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-full h-full bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center text-white font-bold text-lg overflow-hidden" style={{display: 'none'}}>
+                      <img 
+                        src="/images/club/acm/logo.jpg" 
+                        alt="ACM Logo"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'block';
+                        }}
+                      />
+                      <span style={{display: 'none'}}>ACM</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Présentation */}
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-3 text-gray-900 flex items-center">
+                  <BookOpen className="w-5 h-5 mr-2 text-green-600" />
+                  Présentation du Club
+                </h3>
+                <p className="text-gray-600 leading-relaxed">{clubModal.detailsComplets.presentation}</p>
+              </div>
+
+              {/* Objectifs */}
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-3 text-gray-900 flex items-center">
+                  <Target className="w-5 h-5 mr-2 text-green-600" />
+                  Objectifs
+                </h3>
+                <ul className="space-y-2">
+                  {clubModal.detailsComplets.objectifs.map((objectif, index) => (
+                    <li key={index} className="flex items-start text-gray-600">
+                      <span className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      {objectif}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Activités détaillées */}
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-3 text-gray-900 flex items-center">
+                  <Code className="w-5 h-5 mr-2 text-green-600" />
+                  Activités Principales
+                </h3>
+                <ul className="space-y-2">
+                  {clubModal.detailsComplets.activitesDetaillees.map((activite, index) => (
+                    <li key={index} className="flex items-start text-gray-600">
+                      <span className="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                      {activite}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Focus Compétition */}
+              <div className="mb-6 bg-green-50 p-4 rounded-lg">
+                <h3 className="text-xl font-semibold mb-3 text-green-800 flex items-center">
+                  <Trophy className="w-5 h-5 mr-2" />
+                  Focus Compétition
+                </h3>
+                <p className="text-green-700">{clubModal.detailsComplets.focusCompetition}</p>
+              </div>
+
+              {/* Valeurs */}
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-3 text-gray-900 flex items-center">
+                  <Award className="w-5 h-5 mr-2 text-green-600" />
+                  Nos Valeurs
+                </h3>
+                <div className="grid md:grid-cols-2 gap-2">
+                  {clubModal.detailsComplets.valeurs.map((valeur, index) => (
+                    <div key={index} className="bg-gray-100 p-3 rounded-lg text-center">
+                      <span className="text-gray-700 font-medium">{valeur}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-4 pt-4 border-t">
+                {clubModal.facebook ? (
+                  <Button 
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    onClick={() => window.open(clubModal.facebook, '_blank')}
+                  >
+                    <Facebook className="w-4 h-4 mr-2" />
+                    Suivre sur Facebook
+                  </Button>
+                ) : (
+                  <Button className="flex-1 bg-green-600 hover:bg-green-700 text-white">
+                    <Users className="w-4 h-4 mr-2" />
+                    Rejoindre le Club
+                  </Button>
+                )}
+                <Button className="flex-1 border-green-600 text-green-600 hover:bg-green-600 hover:text-white bg-white border">
+                  Contacter : {clubModal.email}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
