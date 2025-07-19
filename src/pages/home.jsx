@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
 import { ChevronRight, Calendar, Users, MapPin, Phone, Mail, Award, X } from 'lucide-react';
 
 export default function HomePage() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [showContactCard, setShowContactCard] = useState(false);
+  const contactCardRef = useRef(null);
+
+  // Gérer le clic en dehors de la card
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (contactCardRef.current && !contactCardRef.current.contains(event.target)) {
+        setShowContactCard(false);
+      }
+    }
+
+    if (showContactCard) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showContactCard]);
   
   const integrationPhotos = [
     { id: 1, title: "Cérémonie d'Ouverture", description: "Accueil des nouveaux étudiants" },
@@ -24,7 +43,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Alternative Modern Header */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
+      <header className="bg-white shadow-md sticky top-0 z-50 relative">
         <div className="w-full px-6">
           {/* Compact Top Bar */}
           <div className="flex justify-between items-center py-3 border-b border-red-100">
@@ -79,7 +98,10 @@ export default function HomePage() {
               </div>
               
               <div className="flex items-center space-x-3">
-                <Button className="bg-[#E30613] hover:bg-[#c00010] text-white px-6 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <Button 
+                  className="bg-[#E30613] hover:bg-[#c00010] text-white px-6 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                  onClick={() => setShowContactCard(!showContactCard)}
+                >
                   <Mail className="w-4 h-4 mr-2" />
                   Nous Contacter
                 </Button>
@@ -109,6 +131,101 @@ export default function HomePage() {
             </div>
           </nav>
         </div>
+        
+        {/* Contact Card */}
+        {showContactCard && (
+          <div className="absolute top-full left-1/2 transform -translate-x-1/2 z-50 mt-2" ref={contactCardRef}>
+            <div className="bg-white rounded-lg shadow-xl border p-6 w-96">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-gray-900">Contactez-nous</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowContactCard(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+              
+              <div className="space-y-4">
+                {/* Mohamed Aziz Grissa */}
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center mb-3">
+                    <div className="w-12 h-12 rounded-full overflow-hidden mr-3 border-2 border-[#E30613]/20">
+                      <img 
+                        src="/images/mohamed-aziz-grissa.jpg" 
+                        alt="Mohamed Aziz Grissa"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      <div className="w-full h-full bg-[#E30613] flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                        MAG
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-gray-900">Mohamed Aziz Grissa</h4>
+                      <p className="text-xs text-[#E30613]">Président Comité des étudiants</p>
+                    </div>
+                  </div>
+                  <div className="space-y-1 text-xs">
+                    <p className="flex items-center text-gray-600">
+                      <Phone className="w-3 h-3 mr-2" />
+                      +216 23 781 138
+                    </p>
+                    <p className="flex items-center text-gray-600">
+                      <Mail className="w-3 h-3 mr-2" />
+                      mohamedaziz.grissa@esprit.tn
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Malek Jendoubi */}
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex items-center mb-3">
+                    <div className="w-12 h-12 rounded-full overflow-hidden mr-3 border-2 border-blue-500/20">
+                      <img 
+                        src="/images/malek-jendoubi.jpg" 
+                        alt="Malek Jendoubi"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      <div className="w-full h-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                        MJ
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-semibold text-gray-900">Malek Jendoubi</h4>
+                      <p className="text-xs text-blue-600">Responsable étudiant du comité d'élève</p>
+                    </div>
+                  </div>
+                  <div className="space-y-1 text-xs">
+                    <p className="flex items-center text-gray-600">
+                      <Phone className="w-3 h-3 mr-2" />
+                      +216 96 794 608
+                    </p>
+                    <p className="flex items-center text-gray-600">
+                      <Mail className="w-3 h-3 mr-2" />
+                      malek.jendoubi@esprit.tn
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-xs text-gray-500 text-center">
+                  N'hésitez pas à nous contacter pour toute question ou suggestion
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Enhanced Hero Section */}
@@ -747,37 +864,109 @@ export default function HomePage() {
                 </div>
                 <p className="text-gray-600 mb-4">Contribue à façonner les politiques et orientations académiques de l'école.</p>
                 
-                {/* Représentant */}
-                <div className="bg-red-50 p-4 rounded-lg mb-4">
-                  <div className="flex items-center mb-3">
-                    <div className="w-12 h-12 bg-gray-100 rounded-full overflow-hidden mr-3">
-                      <img 
-                        src="/images/conseil/malek.jpg" 
-                        alt="Malek Jendoubi"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div className="w-full h-full bg-[#E30613] rounded-full flex items-center justify-center text-white font-bold" style={{display: 'none'}}>
-                        MJ
+                {/* Représentants 2024/2025 */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-[#E30613] mb-3">Année 2024/2025</h4>
+                  
+                  {/* Malek Jendoubi */}
+                  <div className="bg-red-50 p-3 rounded-lg mb-3">
+                    <div className="flex items-center mb-2">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                        <img 
+                          src="/images/conseil/malek.jpg" 
+                          alt="Malek Jendoubi"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="w-full h-full bg-[#E30613] rounded-full flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                          MJ
+                        </div>
+                      </div>
+                      <div>
+                        <h5 className="font-semibold text-[#E30613] text-sm">Malek Jendoubi</h5>
+                        <p className="text-xs text-gray-500">Représentant Étudiant</p>
                       </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-[#E30613]">Malek Jendoubi</h4>
-                      <p className="text-sm text-gray-500">Représentant Étudiant</p>
+                  </div>
+                  
+                  {/* Soulaima Hleli */}
+                  <div className="bg-red-50 p-3 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                        <img 
+                          src="/images/conseil/soulaima-hleli.jpg" 
+                          alt="Soulaima Hleli"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="w-full h-full bg-[#E30613] rounded-full flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                          SH
+                        </div>
+                      </div>
+                      <div>
+                        <h5 className="font-semibold text-[#E30613] text-sm">Soulaima Hleli</h5>
+                        <p className="text-xs text-gray-500">Représentante Étudiante</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-2 text-sm">
-                    <p className="flex items-center text-gray-600">
-                      <Mail className="w-4 h-4 mr-2" />
-                      malek.jendoubi@esprit.tn
-                    </p>
-                    <p className="flex items-center text-gray-600">
-                      <Phone className="w-4 h-4 mr-2" />
-                      +216 96 794 608
-                    </p>
+                </div>
+                
+                {/* Représentants 2023/2024 */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-600 mb-3">Année 2023/2024</h4>
+                  
+                  {/* Isra Zribi */}
+                  <div className="bg-gray-100 p-3 rounded-lg mb-3">
+                    <div className="flex items-center mb-2">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                        <img 
+                          src="/images/conseil/isra-zribi.jpeg" 
+                          alt="Isra Zribi"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="w-full h-full bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                          IZ
+                        </div>
+                      </div>
+                      <div>
+                        <h5 className="font-semibold text-gray-600 text-sm">Isra Zribi</h5>
+                        <p className="text-xs text-gray-500">Représentante Étudiante</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Tasnim Ghorbel */}
+                  <div className="bg-gray-100 p-3 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                        <img 
+                          src="/images/conseil/tasnim-ghorbel.jpg" 
+                          alt="Tasnim Ghorbel"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="w-full h-full bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                          TG
+                        </div>
+                      </div>
+                      <div>
+                        <h5 className="font-semibold text-gray-600 text-sm">Tasnim Ghorbel</h5>
+                        <p className="text-xs text-gray-500">Représentante Étudiante</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
@@ -802,37 +991,59 @@ export default function HomePage() {
                 </div>
                 <p className="text-gray-600 mb-4">Défend les droits des étudiants et veille à l'équité des procédures.</p>
                 
-                {/* Même représentant */}
-                <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                  <div className="flex items-center mb-3">
-                    <div className="w-12 h-12 bg-gray-100 rounded-full overflow-hidden mr-3">
-                      <img 
-                        src="/images/conseil/malek.jpg" 
-                        alt="Malek Jendoubi"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      <div className="w-full h-full bg-gray-600 rounded-full flex items-center justify-center text-white font-bold" style={{display: 'none'}}>
-                        MJ
+                {/* Représentant 2024/2025 */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-700 mb-3">Année 2024/2025</h4>
+                  
+                  <div className="bg-gray-50 p-3 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                        <img 
+                          src="/images/conseil/malek.jpg" 
+                          alt="Malek Jendoubi"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="w-full h-full bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                          MJ
+                        </div>
+                      </div>
+                      <div>
+                        <h5 className="font-semibold text-gray-700 text-sm">Malek Jendoubi</h5>
+                        <p className="text-xs text-gray-500">Représentant Étudiant</p>
                       </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-700">Malek Jendoubi</h4>
-                      <p className="text-sm text-gray-500">Représentant Étudiant</p>
-                    </div>
                   </div>
-                  <div className="space-y-2 text-sm">
-                    <p className="flex items-center text-gray-600">
-                      <Mail className="w-4 h-4 mr-2" />
-                      malek.jendoubi@esprit.tn
-                    </p>
-                    <p className="flex items-center text-gray-600">
-                      <Phone className="w-4 h-4 mr-2" />
-                      +216 96 794 608
-                    </p>
+                </div>
+                
+                {/* Représentante 2023/2024 */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-600 mb-3">Année 2023/2024</h4>
+                  
+                  <div className="bg-gray-100 p-3 rounded-lg">
+                    <div className="flex items-center mb-2">
+                      <div className="w-10 h-10 bg-gray-100 rounded-full overflow-hidden mr-3">
+                        <img 
+                          src="/images/conseil/isra-zribi.jpeg" 
+                          alt="Isra Zribi"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        <div className="w-full h-full bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{display: 'none'}}>
+                          IZ
+                        </div>
+                      </div>
+                      <div>
+                        <h5 className="font-semibold text-gray-600 text-sm">Isra Zribi</h5>
+                        <p className="text-xs text-gray-500">Représentante Étudiante</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
@@ -843,6 +1054,122 @@ export default function HomePage() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Section Nous Contacter */}
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+        <div className="w-full px-6">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Nous Contacter</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Rencontrez les responsables du comité des étudiants, votre pont vers une meilleure expérience étudiante
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {/* Card Mohamed Aziz Grissa - Président */}
+            <Card className="group relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#E30613]/5 to-[#E30613]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <CardContent className="relative p-8">
+                <div className="flex flex-col items-center text-center mb-6">
+                  <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-[#E30613]/20 group-hover:border-[#E30613]/40 transition-colors duration-300">
+                    <img 
+                      src="/images/mohamed-aziz-grissa.jpg" 
+                      alt="Mohamed Aziz Grissa"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-full h-full bg-gradient-to-br from-[#E30613] to-[#c00010] flex items-center justify-center text-white font-bold text-lg" style={{display: 'none'}}>
+                      MAG
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-[#E30613] transition-colors duration-300">
+                    Mohamed Aziz Grissa
+                  </h3>
+                  <div className="inline-block bg-[#E30613]/10 text-[#E30613] px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    Président Comité des étudiants
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center p-3 bg-gray-50 rounded-lg group-hover:bg-[#E30613]/5 transition-colors duration-300">
+                    <Phone className="w-5 h-5 text-[#E30613] mr-3 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium">+216 23 781 138</span>
+                  </div>
+                  <div className="flex items-center p-3 bg-gray-50 rounded-lg group-hover:bg-[#E30613]/5 transition-colors duration-300">
+                    <Mail className="w-5 h-5 text-[#E30613] mr-3 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">mohamedaziz.grissa@esprit.tn</span>
+                  </div>
+                </div>
+                
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 text-center">
+                    Responsable de la représentation étudiante et de l'amélioration de la vie étudiante à ESPRIT
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Card Malek Jendoubi - Responsable étudiant */}
+            <Card className="group relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <CardContent className="relative p-8">
+                <div className="flex flex-col items-center text-center mb-6">
+                  <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-4 border-blue-500/20 group-hover:border-blue-500/40 transition-colors duration-300">
+                    <img 
+                      src="/images/malek-jendoubi.jpg" 
+                      alt="Malek Jendoubi"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white font-bold text-lg" style={{display: 'none'}}>
+                      MJ
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-blue-500 transition-colors duration-300">
+                    Malek Jendoubi
+                  </h3>
+                  <div className="inline-block bg-blue-500/10 text-blue-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
+                    Responsable étudiant du comité d'élève
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center p-3 bg-gray-50 rounded-lg group-hover:bg-blue-500/5 transition-colors duration-300">
+                    <Phone className="w-5 h-5 text-blue-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium">+216 96 794 608</span>
+                  </div>
+                  <div className="flex items-center p-3 bg-gray-50 rounded-lg group-hover:bg-blue-500/5 transition-colors duration-300">
+                    <Mail className="w-5 h-5 text-blue-500 mr-3 flex-shrink-0" />
+                    <span className="text-gray-700 text-sm">malek.jendoubi@esprit.tn</span>
+                  </div>
+                </div>
+                
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 text-center">
+                    Interface entre les étudiants et l'administration, garant de vos droits et de vos besoins
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="text-center mt-12">
+            <p className="text-gray-600 mb-6">
+              N'hésitez pas à nous contacter pour toute question, suggestion ou problème concernant votre vie étudiante
+            </p>
+            <Button className="bg-[#E30613] hover:bg-[#c00010] text-white px-8 py-3 rounded-full font-medium shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <Mail className="w-4 h-4 mr-2" />
+              Envoyer un message
+            </Button>
           </div>
         </div>
       </section>
@@ -921,11 +1248,15 @@ export default function HomePage() {
           </div>
           
           <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-500">
-            <p>© {new Date().getFullYear()} Comité des Étudiants ESPRIT. Tous droits réservés.</p>
-            <p className="mt-2 text-sm">
-              En partenariat avec <span className="text-[#E30613]">ESPRIT</span> - École Supérieure Privée d'Ingénierie et de Technologies
-            </p>
-          </div>
+  <p>© {new Date().getFullYear()} Comité des Étudiants ESPRIT. Tous droits réservés.</p>
+  <p className="mt-2 text-sm">
+    En partenariat avec <span className="text-[#E30613]">ESPRIT</span> - École Supérieure Privée d'Ingénierie et de Technologies
+  </p>
+  <p className="mt-2 text-sm">
+    Développé par <span className="font-medium text-gray-700">Malek Jendoubi</span> & <span className="font-medium text-gray-700">Eya Trabelsi</span> — <span className="italic">TWIN & SIM</span>
+  </p>
+</div>
+
         </div>
       </footer>
     </div>
