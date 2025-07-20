@@ -216,7 +216,6 @@ export default function ClubsPage() {
               Retour
             </Button>
             <div className="flex items-center space-x-4">
-              <img src="/images/logo.png" alt="ESPRIT" className="h-10 w-auto" />
               <span className="text-xl font-bold text-green-600">Clubs Étudiants</span>
             </div>
             <Button 

@@ -1,13 +1,34 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
-import { Heart, Phone, Mail, Clock, Shield, Users, ArrowLeft, MapPin } from 'lucide-react';
+import {Heart, Phone, Mail, Clock, Shield, Users, ArrowLeft, MapPin, Award, X} from 'lucide-react';
+
+
 
 export default function CelluleEcoutePage() {
+  const [showContactCard, setShowContactCard] = useState(false);
+  const contactCardRef = useRef(null);
+
+// Gérer le clic en dehors de la card
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (contactCardRef.current && !contactCardRef.current.contains(event.target)) {
+        setShowContactCard(false);
+      }
+    }
+
+    if (showContactCard) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showContactCard]);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="relative bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Button 
@@ -19,31 +40,121 @@ export default function CelluleEcoutePage() {
               Retour
             </Button>
             <div className="flex items-center space-x-4">
-              <img src="/images/logo.png" alt="ESPRIT" className="h-10 w-auto" />
               <span className="text-xl font-bold text-blue-600">Cellule d'Écoute</span>
             </div>
+            <Button
+                onClick={() => setShowContactCard(!showContactCard)}
+                className="bg-gradient-to-r from-blue-600 to-blue-800 text-white"
+            >
+              <Award className="w-4 h-4 mr-2" />
+              Contact
+            </Button>
           </div>
         </div>
+        {/* Contact Card */}
+        {showContactCard && (
+            <div className="absolute top-full right-4 z-50 mt-2" ref={contactCardRef}>
+              <div className="bg-white rounded-lg shadow-xl border p-6 w-96">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Notre Équipe</h3>
+                  <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowContactCard(false)}
+                      className="text-gray-500 hover:text-gray-700"
+                  >
+                    <X className="w-4 h-4"/>
+                  </Button>
+                </div>
+
+                {/* Zied SAIDI */}
+                <div className="flex items-center mb-6">
+                  <div className="w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-blue-200">
+                    <img
+                        src="/images/cellule/ziedsaidi.PNG"
+                        alt="Zied SAIDI"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                    />
+                    <div
+                        className="w-full h-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg"
+                        style={{display: 'none'}}>
+                      ZS
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900">Zied SAIDI</h4>
+                    <p className="text-sm text-blue-600">Cellule d'écoute</p>
+                    <p className="text-sm text-gray-600 flex items-center">
+                      <Mail className="w-4 h-4 mr-1"/> zied.saidi@esprit.tn
+                    </p>
+                  </div>
+                </div>
+
+                {/* Safa BEN HAMMOU */}
+                <div className="flex items-center">
+                  <div className="w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-blue-200">
+                    <img
+                        src="/images/cellule/safa-benhammou.PNG"
+                        alt="Safa BEN HAMMOU"
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                    />
+                    <div
+                        className="w-full h-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-lg"
+                        style={{display: 'none'}}>
+                      SB
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="text-base font-semibold text-gray-900">Safa BEN HAMMOU</h4>
+                    <p className="text-sm text-blue-600">Psychologue</p>
+                    <p className="text-sm text-gray-600 flex items-center">
+                      <Mail className="w-4 h-4 mr-1"/> safa.benhammou@esprit.tn
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <p className="text-xs text-gray-500 text-center">
+                    Une équipe dédiée à votre bien-être à l’écoute des étudiants
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+
+        )}
       </header>
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Heart className="w-16 h-16 mx-auto mb-6 text-white" />
+            <Heart className="w-16 h-16 mx-auto mb-6 text-white"/>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Espace d'Écoute et d'Orientation
             </h1>
             <p className="text-xl mb-8 max-w-4xl mx-auto leading-relaxed">
-              Un espace confidentiel pour soutenir et orienter les étudiants. C'est un lieu où vous pouvez parler de vos doutes, de vos problèmes et trouver une orientation dans différents domaines (scolarité, stress/anxiété, tristesse, mal-être, etc.)
+              Un espace confidentiel pour soutenir et orienter les étudiants. C'est un lieu où vous pouvez parler de vos
+              doutes, de vos problèmes et trouver une orientation dans différents domaines (scolarité, stress/anxiété,
+              tristesse, mal-être, etc.)
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3">
-                <Phone className="w-4 h-4 mr-2" />
+                <Phone className="w-4 h-4 mr-2"/>
                 +216 92 234 330
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3">
-                <Mail className="w-4 h-4 mr-2" />
+              <Button variant="outline"
+                      className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3">
+                <Mail className="w-4 h-4 mr-2"/>
                 Cellule.decoute@esprit.tn
               </Button>
             </div>
@@ -57,11 +168,12 @@ export default function CelluleEcoutePage() {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Notre Approche</h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-8">
-              La priorité est donnée au soutien de la parole et à l'écoute, ainsi qu'à l'initiation d'une réflexion personnelle, 
+              La priorité est donnée au soutien de la parole et à l'écoute, ainsi qu'à l'initiation d'une réflexion
+              personnelle,
               afin d'élaborer avec l'étudiant des réponses adaptées à chaque situation.
             </p>
             <p className="text-lg text-gray-600 leading-relaxed">
-              À ce titre, et si nécessaire, des orientations vers différents partenaires peuvent être proposées, 
+              À ce titre, et si nécessaire, des orientations vers différents partenaires peuvent être proposées,
               en facilitant et en accompagnant l'étudiant dans cette démarche.
             </p>
           </div>
