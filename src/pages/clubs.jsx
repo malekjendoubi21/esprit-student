@@ -228,7 +228,7 @@ export default function ClubsPage() {
             </Button>
           </div>
         </div>
-        
+
         {/* Contact Card */}
         {showContactCard && (
           <div className="absolute top-full right-4 z-50 mt-2" ref={contactCardRef}>
@@ -244,11 +244,11 @@ export default function ClubsPage() {
                   <X className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <div className="flex items-center mb-4">
                 <div className="w-16 h-16 rounded-full overflow-hidden mr-4 border-2 border-green-200">
-                  <img 
-                    src="/images/club/tasnim-ghorbel.jpg" 
+                  <img
+                    src="/images/club/tasnim-ghorbel.jpg"
                     alt="Tasnim Ghorbel"
                     className="w-full h-full object-cover"
                     onError={(e) => {
@@ -266,7 +266,7 @@ export default function ClubsPage() {
                   <p className="text-gray-600 text-sm">Comité des étudiants</p>
                 </div>
               </div>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center p-3 bg-green-50 rounded-lg">
                   <span className="text-lg mr-2">📞</span>
@@ -277,7 +277,7 @@ export default function ClubsPage() {
                   <span className="text-gray-700 text-sm">Ghorbel.Tasnim@esprit.tn</span>
                 </div>
               </div>
-              
+
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <p className="text-xs text-gray-500 text-center">
                   Contactez-la pour créer votre propre club étudiant
@@ -285,6 +285,9 @@ export default function ClubsPage() {
               </div>
             </div>
           </div>
+
+
+
         )}
       </header>
 

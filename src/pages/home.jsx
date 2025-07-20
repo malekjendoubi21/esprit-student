@@ -51,7 +51,7 @@ export default function HomePage() {
             <div className="flex items-center space-x-3">
               <img src="/images/logo.png" alt="ESPRIT" className="h-10 w-auto" />
               <div className="hidden sm:block">
-                <h2 clasName="text-xm text-gray-500 -mt-1">Comité des Étudiants</h2>
+                <h2 clasName="text-xm text-gray-500 -mt-1"></h2>
               </div>
             </div>
 
