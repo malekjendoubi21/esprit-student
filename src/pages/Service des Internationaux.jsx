@@ -1,159 +1,10 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
-import { Globe, Users, Plane, BookOpen, Award, Mail, Phone, ArrowLeft, MapPin, Calendar } from 'lucide-react';
+import {Globe, Users, Plane, BookOpen, Award, Mail, Phone, ArrowLeft, MapPin, Calendar, X} from 'lucide-react';
 
 export default function ServiceInternationalPage() {
-  const services = [
-    {
-      titre: "Accueil Étudiants Internationaux",
-      description: "Accompagnement complet pour votre intégration à ESPRIT",
-      icon: Users,
-      details: ["Aide aux démarches administratives", "Orientation sur le campus", "Parrainage étudiant", "Intégration culturelle"]
-    },
-    {
-      titre: "Programmes d'Échange",
-      description: "Opportunités d'études dans nos universités partenaires",
-      icon: Plane,
-      details: ["Échange semestre/année", "Stages internationaux", "Double diplôme", "Mobilité encadrée"]
-    },
-    {
-      titre: "Soutien Linguistique",
-      description: "Cours de langues et certification internationale",
-      icon: BookOpen,
-      details: ["Cours de français", "Cours d'arabe", "Préparation TOEFL/IELTS", "Certificats linguistiques"]
-    },
-    {
-      titre: "Événements Multiculturels",
-      description: "Célébration de la diversité culturelle",
-      icon: Globe,
-      details: ["Semaines culturelles", "Festivals internationaux", "Soirées interculturelles", "Ateliers culinaires"]
-    }
-  ];
 
-  const partenaires = [
-    {
-      pays: "France",
-      universites: ["Université Paris-Saclay", "INSA Lyon", "Centrale Nantes", "Télécom Paris"],
-      etudiants: "25 étudiants ESPRIT",
-      programmes: ["Échange semestriel", "Double diplôme", "Stages"]
-    },
-    {
-      pays: "Canada",
-      universites: ["Université de Montréal", "Université Laval", "Concordia University"],
-      etudiants: "15 étudiants ESPRIT",
-      programmes: ["Échange annuel", "Recherche", "Stages d'été"]
-    },
-    {
-      pays: "Allemagne",
-      universites: ["TU Berlin", "RWTH Aachen", "Karlsruhe Institute"],
-      etudiants: "20 étudiants ESPRIT",
-      programmes: ["Échange semestriel", "Stages industriels", "Recherche"]
-    },
-    {
-      pays: "Espagne",
-      universites: ["Universidad Politécnica Madrid", "UPC Barcelona", "Universidad Sevilla"],
-      etudiants: "18 étudiants ESPRIT",
-      programmes: ["Erasmus+", "Stages", "Projets collaboratifs"]
-    },
-    {
-      pays: "Italie",
-      universites: ["Politecnico di Milano", "Università di Bologna", "Sapienza Roma"],
-      etudiants: "12 étudiants ESPRIT",
-      programmes: ["Échange Erasmus", "Stages", "Recherche"]
-    },
-    {
-      pays: "Turquie",
-      universites: ["Bogazici University", "Middle East Technical University", "Sabanci University"],
-      etudiants: "10 étudiants ESPRIT",
-      programmes: ["Échange semestriel", "Stages", "Projets"]
-    }
-  ];
-
-  const etudiantsInternationaux = [
-    {
-      nom: "Maria Garcia",
-      pays: "Espagne",
-      programme: "Échange Erasmus - Génie Informatique",
-      duree: "Semestre 2 - 2024/2025",
-      temoignage: "Une expérience formidable ! L'accueil à ESPRIT est exceptionnel et la diversité culturelle enrichissante."
-    },
-    {
-      nom: "Thomas Mueller",
-      pays: "Allemagne",
-      programme: "Stage industriel - Génie Mécanique",
-      duree: "6 mois - 2024",
-      temoignage: "Stage très enrichissant dans une entreprise partenaire. L'accompagnement du service international est parfait."
-    },
-    {
-      nom: "Sophie Dubois",
-      pays: "France",
-      programme: "Double diplôme - Génie Civil",
-      duree: "2 ans - 2023/2025",
-      temoignage: "Le programme double diplôme me permet d'avoir une formation complète et une expérience internationale unique."
-    },
-    {
-      nom: "Ahmed Al-Rashid",
-      pays: "Maroc",
-      programme: "Master recherche - Informatique",
-      duree: "2 ans - 2024/2026",
-      temoignage: "Excellente qualité de formation et recherche. Les laboratoires sont très bien équipés."
-    }
-  ];
-
-  const evenements = [
-    {
-      titre: "Semaine Culturelle Internationale",
-      date: "10-15 Mars 2025",
-      description: "Célébration de la diversité culturelle avec expositions, spectacles et gastronomie du monde",
-      participants: "Tous les étudiants"
-    },
-    {
-      titre: "Forum Mobilité Internationale",
-      date: "25 Avril 2025",
-      description: "Présentation des opportunités d'échange et témoignages d'étudiants",
-      participants: "Étudiants intéressés par la mobilité"
-    },
-    {
-      titre: "Soirée d'Accueil Nouveaux Étudiants",
-      date: "15 Septembre 2025",
-      description: "Accueil et intégration des nouveaux étudiants internationaux",
-      participants: "Étudiants internationaux"
-    },
-    {
-      titre: "Café Linguistique",
-      date: "Chaque vendredi 16h",
-      description: "Échange linguistique et culturel informel",
-      participants: "Tous les étudiants"
-    }
-  ];
-
-  const statistiques = [
-    {
-      titre: "Étudiants Internationaux",
-      valeur: "180",
-      description: "De 35 pays différents",
-      couleur: "text-indigo-600"
-    },
-    {
-      titre: "Universités Partenaires",
-      valeur: "45",
-      description: "Dans 20 pays",
-      couleur: "text-green-600"
-    },
-    {
-      titre: "Étudiants en Mobilité",
-      valeur: "120",
-      description: "ESPRIT à l'étranger",
-      couleur: "text-purple-600"
-    },
-    {
-      titre: "Taux de Satisfaction",
-      valeur: "96%",
-      description: "Étudiants satisfaits",
-      couleur: "text-orange-600"
-    }
-  ];
 
   const equipe = [
     {
@@ -178,7 +29,25 @@ export default function ServiceInternationalPage() {
       langues: ["Anglais", "Français", "Arabe"]
     }
   ];
+  const [showContactCard, setShowContactCard] = useState(false);
+  const contactCardRef = useRef(null);
 
+// Gérer le clic en dehors de la card
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (contactCardRef.current && !contactCardRef.current.contains(event.target)) {
+        setShowContactCard(false);
+      }
+    }
+
+    if (showContactCard) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showContactCard]);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -194,12 +63,83 @@ export default function ServiceInternationalPage() {
               Retour
             </Button>
             <div className="flex items-center space-x-4">
-              <img src="/images/logo.png" alt="ESPRIT" className="h-10 w-auto" />
               <span className="text-xl font-bold text-indigo-600">Service des Internationaux</span>
             </div>
+            <Button
+                onClick={() => setShowContactCard(!showContactCard)}
+                className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white hover:from-indigo-700 hover:to-indigo-900 transition-colors"
+            >
+              <Award className="w-4 h-4 mr-2"/>
+              Contacter
+            </Button>
           </div>
         </div>
       </header>
+      {/* Contact Card (en dehors du header) */}
+      {/* Contact Card (en dehors du header) */}
+      {showContactCard && (
+          <div className="absolute top-20 right-4 z-50 mt-2" ref={contactCardRef}>
+            <div className="bg-white rounded-lg shadow-xl border p-6 w-80">
+              <div className="relative mb-4">
+                <h3 className="text-lg font-semibold text-gray-900 text-center">Contact</h3>
+                <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowContactCard(false)}
+                    className="absolute right-0 top-0 text-gray-500 hover:text-gray-700"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-start p-3 bg-blue-50 rounded-lg">
+                  <span className="text-xl mr-3">📲</span>
+                  <div>
+                    <p className="text-gray-900 font-semibold">
+                      Service des internationaux
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Mojeivi Nouomsi Ricardo : <span className="font-medium"></span>
+                    </p>
+                    <p className="text-sm text-gray-600">
+                     <span className="font-medium">55 640 117</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start p-3 bg-green-50 rounded-lg">
+                  <span className="text-xl mr-3">📲</span>
+                  <div>
+                    <p className="text-gray-900 font-semibold">Numéro vert</p>
+                    <p className="text-sm text-gray-600">
+                      Étudiants internationaux : <span className="font-medium">
+                    </span>
+                    </p>
+                    <p className="text-sm text-gray-600">
+                   <span className="font-medium">
+                      93 536 235</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start p-3 bg-pink-50 rounded-lg">
+                  <span className="text-xl mr-3">📍</span>
+                  <div>
+                    <p className="text-gray-900 font-semibold">Cellule d'écoute</p>
+                    <p className="text-sm text-gray-600">Bloc A, Campus Esprit</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-xs text-gray-500 text-center">
+                  Contactez ces services pour toute aide aux étudiants internationaux
+                </p>
+              </div>
+            </div>
+          </div>
+      )}
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white py-16">
@@ -212,16 +152,198 @@ export default function ServiceInternationalPage() {
             <p className="text-xl mb-8 max-w-3xl mx-auto">
               Votre passerelle vers le monde - Programmes d'échange, accueil international et ouverture culturelle
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3">
-                <Plane className="w-4 h-4 mr-2" />
-                Partir à l'Étranger
-              </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-indigo-600 px-8 py-3">
-                <Users className="w-4 h-4 mr-2" />
-                Accueil International
-              </Button>
+
+          </div>
+        </div>
+      </section>
+
+
+      {/* Bienvenue Section - Modern Design */}
+      <section className="py-20 bg-gradient-to-br from-white to-indigo-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative">
+            {/* Background decorative element */}
+            <div className="absolute inset-0 -z-10">
+              <div className="absolute right-1/2 bottom-0 w-[200px] h-[200px] rounded-full bg-indigo-100/50"></div>
+              <div className="absolute left-1/2 top-0 w-[300px] h-[300px] rounded-full bg-blue-100/30"></div>
             </div>
+
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              {/* Left Column - Image */}
+              <div className="relative">
+                <div className="absolute -inset-4 bg-indigo-600/10 rounded-xl transform -rotate-6"></div>
+                <img
+                    src="/images/Internationaux/Etudiants-Internationaux-image.jpg"
+                    alt="Étudiants Internationaux"
+                    className="relative w-full h-[400px] object-cover rounded-lg shadow-xl"
+                />
+                <div className="absolute -bottom-6 -right-6 bg-indigo-600 text-white p-4 rounded-lg shadow-lg">
+                  <p className="text-sm font-medium">+180 Étudiants</p>
+                  <p className="text-xs opacity-75">de 35 pays</p>
+                </div>
+              </div>
+
+              {/* Right Column - Content */}
+              <div className="space-y-6">
+                <div className="inline-block px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+                  Bienvenue à ESPRIT
+                </div>
+
+                <h2 className="text-4xl font-bold text-gray-900 leading-tight">
+                  Votre Aventure Internationale
+                  <span className="text-indigo-600"> Commence Ici</span>
+                </h2>
+
+                <div className="prose prose-lg text-gray-600">
+                  <p>
+                    Chaque année, ESPRIT accueille des étudiants internationaux provenant de divers horizons. Notre mission est de garantir une intégration harmonieuse et un accompagnement personnalisé pour que chaque étudiant se sente chez lui dès son arrivée en Tunisie.
+                  </p>
+                </div>
+
+                {/* Key Features */}
+                <div className="grid grid-cols-2 gap-4 mt-8">
+                  {[
+                    { title: "Accompagnement", value: "24/7" },
+                    { title: "Universités Partenaires", value: "45+" },
+                    { title: "Taux de Satisfaction", value: "96%" },
+                    { title: "Pays Représentés", value: "35" }
+                  ].map((item) => (
+                      <div key={item.title} className="bg-white p-4 rounded-lg shadow-sm">
+                        <div className="text-2xl font-bold text-indigo-600">{item.value}</div>
+                        <div className="text-sm text-gray-600">{item.title}</div>
+                      </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Dispositif d'accueil Section */}
+      <section className="py-20 bg-gradient-to-br from-white to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            {/* Left Column - Content */}
+            <div className="lg:col-span-5 space-y-8">
+              <div className="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-full">
+                <Users className="w-4 h-4 mr-2" />
+                <span className="text-sm font-medium">Dispositif d'accueil</span>
+              </div>
+
+              <h2 className="text-4xl font-bold text-gray-900 leading-tight">
+                Un accueil personnalisé dès votre <span className="text-blue-600">premier jour</span>
+              </h2>
+
+              <p className="text-xl text-gray-600">
+                Notre équipe d'accueil, composée d'étudiants ambassadeurs et de membres expérimentés, est là pour vous aider à chaque étape de votre installation.
+              </p>
+
+              <div className="grid grid-cols-2 gap-6">
+                {[
+                  { title: "Assistance aéroport", icon: "🛬" },
+                  { title: "Démarches administratives", icon: "📋" },
+                  { title: "Guide logement", icon: "🏠" },
+                  { title: "Support quotidien", icon: "💪" }
+                ].map((service) => (
+                    <div key={service.title} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                      <span className="text-2xl mb-2 block">{service.icon}</span>
+                      <h3 className="font-medium text-gray-900">{service.title}</h3>
+                    </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Column - Visual */}
+            <div className="lg:col-span-7 relative">
+              <div className="relative">
+                {/* Background shapes */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/10 to-indigo-600/10 rounded-2xl transform rotate-3"></div>
+                <div className="absolute inset-0 bg-white/40 backdrop-blur-sm rounded-2xl"></div>
+
+                {/* Content grid */}
+                <div className="relative grid grid-cols-2 gap-4 p-6">
+                  <div className="space-y-4">
+                    <img
+                        src="/images/Internationaux/accueil1.jpg"
+                        alt="Accueil étudiants"
+                        className="w-full h-48 object-cover rounded-lg shadow-md"
+                    />
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <h4 className="font-medium text-gray-900 mb-1">Équipe d'accueil</h4>
+                      <p className="text-sm text-gray-600">Des étudiants ambassadeurs formés pour vous accompagner</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4 pt-8">
+                    <div className="bg-white p-4 rounded-lg shadow-sm">
+                      <h4 className="font-medium text-gray-900 mb-1">Support 24/7</h4>
+                      <p className="text-sm text-gray-600">Une assistance disponible à tout moment</p>
+                    </div>
+                    <img
+                        src="/images/Internationaux/accueil2.jpg"
+                        alt="Support étudiant"
+                        className="w-full h-48 object-cover rounded-lg shadow-md"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats overlay */}
+              <div className="absolute -bottom-6 -right-6 bg-blue-600 text-white p-6 rounded-lg shadow-xl">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-2xl font-bold">98%</p>
+                    <p className="text-sm opacity-75">Satisfaction</p>
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">24/7</p>
+                    <p className="text-sm opacity-75">Assistance</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Équipe Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-900">Une équipe dédiée à votre service</h2>
+            <p className="mt-4 text-xl text-gray-600">Notre équipe vous accompagne à chaque étape de votre parcours</p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-8">
+            {[
+              {
+                title: "Avant votre arrivée",
+                description: "Dès la confirmation de votre inscription, nous entrons en contact avec vous pour recueillir vos informations essentielles.",
+                icon: "📝"
+              },
+              {
+                title: "Accueil à l'aéroport",
+                description: "Nos équipes vous attendent à l'aéroport pour vous accompagner jusqu'à votre logement.",
+                icon: "✈️"
+              },
+              {
+                title: "Installation et accompagnement",
+                description: "Nous veillons à ce que vous soyez confortablement installé, en vous guidant dans vos tâches quotidiennes.",
+                icon: "🏠"
+              },
+              {
+                title: "Démarches administratives",
+                description: "Un étudiant ainé vous assiste dans l'obtention des documents essentiels.",
+                icon: "📋"
+              }
+            ].map((item, index) => (
+                <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                  <span className="text-4xl mb-4 block">{item.icon}</span>
+                  <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
+                  <p className="text-gray-600">{item.description}</p>
+                </div>
+            ))}
           </div>
         </div>
       </section>
@@ -230,242 +352,67 @@ export default function ServiceInternationalPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Nos Services</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Accompagnement personnalisé pour votre expérience internationale
-            </p>
+            <h2 className="text-3xl font-bold text-gray-900">Services offerts aux étudiants internationaux</h2>
           </div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {services.map((service, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <service.icon className="w-8 h-8 text-indigo-600 mr-3" />
-                    <h3 className="text-xl font-semibold text-gray-900">{service.titre}</h3>
-                  </div>
-                  
-                  <p className="text-gray-600 mb-4">{service.description}</p>
-                  
-                  <div className="space-y-2">
-                    {service.details.map((detail, i) => (
-                      <div key={i} className="flex items-center text-sm text-gray-600">
-                        <span className="w-2 h-2 bg-indigo-600 rounded-full mr-3"></span>
-                        {detail}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Aide logistique",
+                description: "Support pour les échanges de devises et installation",
+                icon: "🔧"
+              },
+              {
+                title: "Support académique",
+                description: "Accompagnement dans votre parcours d'études",
+                icon: "📚"
+              },
+              {
+                title: "Vie quotidienne",
+                description: "Organisation de sorties, conseils et groupes d'entraide",
+                icon: "🌟"
+              }
+            ].map((service, index) => (
+                <div key={index} className="bg-gradient-to-br from-blue-50 to-indigo-50 p-6 rounded-xl shadow-sm">
+                  <span className="text-4xl mb-4 block">{service.icon}</span>
+                  <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
+                  <p className="text-gray-600">{service.description}</p>
+                </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Statistiques Section */}
+      {/* Pourquoi choisir Section */}
       <section className="py-16 bg-indigo-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">ESPRIT International</h2>
-            <p className="text-xl text-gray-600">
-              Notre dimension internationale en chiffres
-            </p>
+            <h2 className="text-3xl font-bold text-gray-900">Pourquoi choisir ESPRIT ?</h2>
           </div>
-          
-          <div className="grid md:grid-cols-4 gap-6">
-            {statistiques.map((stat, index) => (
-              <Card key={index} className="text-center">
-                <CardContent className="p-6">
-                  <div className={`text-4xl font-bold mb-2 ${stat.couleur}`}>
-                    {stat.valeur}
-                  </div>
-                  <div className="text-lg font-semibold text-gray-900 mb-1">
-                    {stat.titre}
-                  </div>
-                  <div className="text-sm text-gray-500">
-                    {stat.description}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Partenaires Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Nos Partenaires Universitaires</h2>
-            <p className="text-xl text-gray-600">
-              Réseau international d'universités prestigieuses
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {partenaires.map((partenaire, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
-                      <Globe className="w-6 h-6 text-indigo-600" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900">{partenaire.pays}</h3>
-                  </div>
-                  
-                  <div className="space-y-2 mb-4">
-                    <h4 className="text-sm font-medium text-gray-700">Universités partenaires:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
-                      {partenaire.universites.map((uni, i) => (
-                        <li key={i}>• {uni}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-indigo-50 p-3 rounded-lg mb-4">
-                    <p className="text-sm text-indigo-800">
-                      <Users className="w-3 h-3 inline mr-1" />
-                      <strong>{partenaire.etudiants}</strong> actuellement
-                    </p>
-                  </div>
-                  
-                  <div className="flex flex-wrap gap-1">
-                    {partenaire.programmes.map((prog, i) => (
-                      <span key={i} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                        {prog}
-                      </span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Témoignages Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Témoignages</h2>
-            <p className="text-xl text-gray-600">
-              L'expérience de nos étudiants internationaux
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            {etudiantsInternationaux.map((etudiant, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-full flex items-center justify-center mr-3">
-                      <span className="text-white font-bold text-sm">
-                        {etudiant.nom.split(' ').map(n => n[0]).join('')}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{etudiant.nom}</h3>
-                      <p className="text-sm text-indigo-600">{etudiant.pays}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="mb-4">
-                    <p className="text-sm text-gray-600">{etudiant.programme}</p>
-                    <p className="text-sm text-gray-500">{etudiant.duree}</p>
-                  </div>
-                  
-                  <blockquote className="italic text-gray-700 border-l-4 border-indigo-500 pl-4">
-                    "{etudiant.temoignage}"
-                  </blockquote>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Événements Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Événements Internationaux</h2>
-            <p className="text-xl text-gray-600">
-              Participez à nos activités multiculturelles
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            {evenements.map((evenement, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-center mb-4">
-                    <Calendar className="w-6 h-6 text-indigo-600 mr-3" />
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900">{evenement.titre}</h3>
-                      <p className="text-sm text-indigo-600">{evenement.date}</p>
-                    </div>
-                  </div>
-                  
-                  <p className="text-gray-600 mb-4">{evenement.description}</p>
-                  
-                  <div className="bg-indigo-50 p-3 rounded-lg">
-                    <p className="text-sm text-indigo-800">
-                      <Users className="w-3 h-3 inline mr-1" />
-                      <strong>Participants:</strong> {evenement.participants}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Équipe Section */}
-      <section className="py-16 bg-indigo-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Notre Équipe</h2>
-            <p className="text-xl text-gray-600">
-              Des professionnels multilingues à votre service
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-6">
-            {equipe.map((membre, index) => (
-              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">
-                      {membre.nom.split(' ').map(n => n[0]).join('')}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-1">{membre.nom}</h3>
-                  <p className="text-indigo-600 font-medium mb-4">{membre.poste}</p>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center justify-center text-sm text-gray-600">
-                      <Mail className="w-3 h-3 mr-2" />
-                      <span className="truncate">{membre.email}</span>
-                    </div>
-                    <div className="flex items-center justify-center text-sm text-gray-600">
-                      <Phone className="w-3 h-3 mr-2" />
-                      <span>{membre.telephone}</span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="text-xs font-medium text-gray-700 mb-2">Langues parlées:</h4>
-                    <div className="flex flex-wrap gap-1 justify-center">
-                      {membre.langues.map((langue, i) => (
-                        <span key={i} className="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded">
-                          {langue}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Qualité d'accueil",
+                description: "Une organisation fluide et une attention particulière pour chaque étudiant",
+                icon: "🌟"
+              },
+              {
+                title: "Diversité culturelle",
+                description: "Une opportunité unique d'interagir avec des étudiants du monde entier",
+                icon: "🌍"
+              },
+              {
+                title: "Support continu",
+                description: "Une équipe dédiée prête à répondre à toutes vos questions",
+                icon: "💪"
+              }
+            ].map((item, index) => (
+                <div key={index} className="bg-white p-6 rounded-xl shadow-md">
+                  <span className="text-4xl mb-4 block">{item.icon}</span>
+                  <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
+                  <p className="text-gray-600">{item.description}</p>
+                </div>
             ))}
           </div>
         </div>
@@ -474,34 +421,22 @@ export default function ServiceInternationalPage() {
       {/* Contact Section */}
       <section className="py-16 bg-indigo-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-4">Contactez-Nous</h2>
-            <p className="text-xl mb-8">
-              Nous sommes là pour vous accompagner dans votre projet international
-            </p>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-2xl p-8 text-white text-center">
+              <h2 className="text-3xl font-bold mb-4">Contacts utiles</h2>
+              <p className="mb-8 text-lg">
+                Pour toute question ou pour en savoir plus sur les démarches à suivre, contactez notre équipe.
+              </p>
+              <div className="inline-flex items-center space-x-2 bg-white/20 px-6 py-3 rounded-full">
+                <Mail className="w-5 h-5"/>
+                <span>Service.internationaux@esprit.tn</span>
+              </div>
+            </div>
           </div>
-          
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <Phone className="w-8 h-8 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Téléphone</h3>
-              <p>+216 70 250 500</p>
-              <p className="text-sm text-indigo-200">Lun-Ven 8h00-17h00</p>
-            </div>
-            
-            <div className="text-center">
-              <Mail className="w-8 h-8 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Email</h3>
-              <p>international@esprit.tn</p>
-              <p className="text-sm text-indigo-200">Réponse sous 24h</p>
-            </div>
-            
-            <div className="text-center">
-              <MapPin className="w-8 h-8 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Bureau</h3>
-              <p>Bâtiment A, 3ème étage</p>
-              <p className="text-sm text-indigo-200">Bureaux 301-305</p>
-            </div>
+
+
           </div>
         </div>
       </section>
