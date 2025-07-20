@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
-import { Utensils, Coffee, Clock, Star, Users, Calendar, ArrowLeft, MapPin, Phone, ChefHat } from 'lucide-react';
+import {Utensils, Coffee, Clock, Star, Users, Calendar, ArrowLeft, MapPin, Phone, ChefHat, Award} from 'lucide-react';
 
 export default function RestaurantPage() {
   const menuJour = [
@@ -130,14 +130,19 @@ export default function RestaurantPage() {
               Retour
             </Button>
             <div className="flex items-center space-x-4">
-              <img src="/images/logo.png" alt="ESPRIT" className="h-10 w-auto" />
               <span className="text-xl font-bold text-red-600">Restaurant & Foyer</span>
             </div>
+            <Button
+                className="bg-gradient-to-r from-red-500 to-red-700 text-white"
+            >
+              <Award className="w-4 h-4 mr-2"/>
+              Contacter
+            </Button>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
+      {/* Hero Section
       <section className="bg-gradient-to-r from-red-500 to-red-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -148,21 +153,40 @@ export default function RestaurantPage() {
             <p className="text-xl mb-8 max-w-3xl mx-auto">
               Savourez une cuisine variée et de qualité dans un cadre convivial et moderne
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-red-600 hover:bg-gray-100 px-8 py-3">
-                <ChefHat className="w-4 h-4 mr-2" />
-                Menu du Jour
-              </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white hover:text-red-600 px-8 py-3">
-                <Calendar className="w-4 h-4 mr-2" />
-                Réserver une Table
-              </Button>
-            </div>
+
           </div>
         </div>
       </section>
+      */}
+      {/* Carte moderne après Hero Section */}
+      <section className="py-20 bg-gray-50 flex justify-center">
+        <div className="max-w-4xl w-full bg-gradient-to-r from-red-400 via-red-300 to-red-400
+                  rounded-3xl shadow-2xl p-12 flex flex-col items-center text-center
+                  transform hover:scale-105 transition-transform duration-300">
+          <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-16 w-16 mb-6 text-red-700"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+          >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h2 className="text-4xl font-extrabold text-red-800 mb-4">
+            Page en cours de développement
+          </h2>
+          <p className="text-lg text-red-900 max-w-3xl">
+            Nous travaillons activement pour vous offrir une expérience exceptionnelle. Merci de votre patience !
+          </p>
+        </div>
+      </section>
 
-      {/* Menu du Jour Section */}
+      {/* Menu du Jour Section
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -196,8 +220,8 @@ export default function RestaurantPage() {
           </div>
         </div>
       </section>
-
-      {/* Formules Section */}
+*/}
+      {/* Formules Section
       <section className="py-16 bg-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -236,8 +260,8 @@ export default function RestaurantPage() {
           </div>
         </div>
       </section>
-
-      {/* Espaces Section */}
+*/}
+      {/* Espaces Section
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -281,8 +305,8 @@ export default function RestaurantPage() {
           </div>
         </div>
       </section>
-
-      {/* Horaires Section */}
+*/}
+      {/* Horaires Section
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -311,8 +335,8 @@ export default function RestaurantPage() {
           </Card>
         </div>
       </section>
-
-      {/* Événements Section */}
+*/}
+      {/* Événements Section
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -339,8 +363,8 @@ export default function RestaurantPage() {
           </div>
         </div>
       </section>
-
-      {/* Services Additionnels Section */}
+*/}
+      {/* Services Additionnels Section
       <section className="py-16 bg-red-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -385,8 +409,8 @@ export default function RestaurantPage() {
           </div>
         </div>
       </section>
-
-      {/* Contact Section */}
+ */}
+      {/* Contact Section
       <section className="py-16 bg-red-600 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
@@ -420,6 +444,7 @@ export default function RestaurantPage() {
           </div>
         </div>
       </section>
+      */}
     </div>
   );
 }
