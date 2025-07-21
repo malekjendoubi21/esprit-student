@@ -9,7 +9,7 @@ import Restaurant from './pages/Restaurant + Foyer'
 import AssociationSportive from './pages/Association Sportive'
 import International from './pages/Service des Internationaux'
 import './App.css'
-import Homee from './pages/Homee'; // ← ce fichier
+import Homee from './pages/homee'; // ← ce fichier
 
 function App() {
   return (
