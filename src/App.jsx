@@ -9,12 +9,16 @@ import Restaurant from './pages/Restaurant + Foyer'
 import AssociationSportive from './pages/Association Sportive'
 import International from './pages/Service des Internationaux'
 import './App.css'
+import Homee from './pages/Homee'; // ← ce fichier
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Homee />} />
+
+        {   /*   <Route path="/" element={<Home />} />
+        */}
+        <Route path="/home" element={<Home />} />
       <Route path="/comite" element={<Comite />} />
       <Route path="/cellule-ecoute" element={<CelluleEcoute />} />
       <Route path="/clubs" element={<Clubs />} />
