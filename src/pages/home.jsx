@@ -284,22 +284,25 @@ export default function HomePage() {
         )}
       </header>
 
-      {/* Enhanced Hero Section */}
-      <section className="relative text-white overflow-hidden min-h-screen flex items-center" style={{backgroundImage: "url('/images/home.jpg')", backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>
-        <div className="absolute inset-0 bg-black/50"></div>
+    
+
+      {/* Modern Image Section */}
+      <section className="relative h-[600px] overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: "url('/images/home.jpg')"
+          }}
+        ></div>
         
-        <div className="relative w-full px-6 py-20">
-          <div className="w-full max-w-4xl mx-auto text-center">
-           
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Votre
-              <span className="block text-white">Vie Étudiante</span>
-              <span className="block text-3xl md:text-4xl font-normal">à ESPRIT</span>
+        {/* Message d'accueil */}
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center">
+          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-5 max-w-xl text-center border border-white/30 shadow-md">
+            <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 drop-shadow-md">
+              Bienvenue à <span className="text-[#E30613]">ESPRIT</span> !
             </h1>
-            
-            <p className="text-xl mb-8 text-gray-100 leading-relaxed">
-              Découvrez tous les services, clubs et opportunités qui vous accompagnent dans votre parcours académique et personnel.
+            <p className="text-base text-white drop-shadow">
+              Votre aventure estudiantine commence ici
             </p>
           </div>
         </div>
