@@ -70,6 +70,54 @@ export default function ClubsPage() {
       }
     },
     {
+      nom: "GDG on Campus ESPRIT",
+      categorie: "Informatique",
+      description: "Google Developer Groups on Campus - Programme mondial de Google pour combler l'écart entre théorie et pratique",
+      membres: 32,
+      president: "Mohamed Ali Khemiri",
+      email: "club_gdgoncampusesprit@esprit.tn",
+      fondation: "2019",
+      activites: ["Tech Talks", "Google Events", "Workshops"],
+      prochainEvent: "Android Development Workshop - 10 Mars 2025",
+      facebook: "https://www.facebook.com/google.developer.groups.gdg.on.campus.esprit",
+      detailsComplets: {
+        nomComplet: "Google Developer Groups on Campus ESPRIT",
+        presentation: "Google Developer Groups on Campus est un programme mondial de Google Developers conçu pour combler l'écart entre la théorie et la pratique. Les GDG on Campus sont des groupes basés sur le campus spécialement conçus pour aider les développeurs en herbe des campus universitaires à apprendre et à créer avec succès avec les technologies Google. En rejoignant GDG, les étudiants développent leurs connaissances dans un environnement d'apprentissage entre pairs et créent des solutions pour les entreprises locales et leur communauté.",
+        objectifs: [
+          "Combler l'écart entre la théorie académique et la pratique industrielle",
+          "Développer les compétences techniques avec les technologies Google",
+          "Créer un environnement d'apprentissage entre pairs",
+          "Construire des solutions pour les entreprises locales et la communauté"
+        ],
+        activitesDetaillees: [
+          "14/12/2024 : The Future of Blockchain Innovation - Session 1",
+          "4/12/2024 : Machine Learning Fundamentals",
+          "17/11/2024 : Première assemblée générale",
+          "13/11/2024 : NestJS Workshop : Build Powerful Projects"
+
+        ],
+        focusCompetition: "Nous nous concentrons sur le développement de projets concrets avec les technologies Google et la participation aux événements Google Developers. Les membres ont l'opportunité de contribuer à des projets open-source et de présenter leurs créations lors d'événements communautaires.",
+        valeurs: [
+          "Innovation technologique",
+          "Apprentissage collaboratif",
+          "Impact communautaire",
+          "Excellence technique"
+        ],
+        benefices: [
+          "Tech Talks exclusifs",
+          "Accès aux événements Google",
+          "Cours et ressources officielles",
+          "Certificats et badges Google",
+          "Réseau professionnel étendu"
+        ],
+        images: [
+          "/images/club/GDGoC/1.jpeg",
+          "/images/club/GDGoC/2.png",
+          "/images/club/GDGoC/3.jpeg"
+        ]
+      }
+    },
+    {
       nom: "ESPRIT Club YouRobot",
       categorie: "Robotique",
       description: "Innovation en robotique et intelligence artificielle",
@@ -368,8 +416,18 @@ export default function ClubsPage() {
                               e.target.nextSibling.style.display = 'flex';
                             }}
                           />
+                        ) : club.nom === "GDG on Campus ESPRIT" ? (
+                          <img 
+                            src="/images/club/GDGoC/logo.jpg" 
+                            alt="GDG Logo"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
                         ) : null}
-                        <span className={`text-white font-bold text-sm ${club.nom === "ESPRIT Club ACM" ? 'hidden' : ''}`}>
+                        <span className={`text-white font-bold text-sm ${(club.nom === "ESPRIT Club ACM" || club.nom === "GDG on Campus ESPRIT") ? 'hidden' : ''}`}>
                           {club.nom.split(' ')[0].substring(0, 2)}
                         </span>
                       </div>
@@ -459,11 +517,11 @@ export default function ClubsPage() {
           
           <div className="grid md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">22</div>
+              <div className="text-4xl font-bold text-green-600 mb-2">23</div>
               <div className="text-gray-600">Clubs Actifs</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-600 mb-2">850+</div>
+              <div className="text-4xl font-bold text-green-600 mb-2">880+</div>
               <div className="text-gray-600">Membres</div>
             </div>
             <div className="text-center">
@@ -526,12 +584,27 @@ export default function ClubsPage() {
         <div className="fixed inset-0 flex items-center justify-center p-4 z-50">
           {/* Test de chargement d'image invisible */}
           <img 
-            src="/images/club/acm/coveracm.jpg" 
+            src={
+              clubModal.nom === "ESPRIT Club ACM" 
+                ? "/images/club/acm/coveracm.jpg"
+                : clubModal.nom === "GDG on Campus ESPRIT" 
+                ? "/images/club/GDGoC/cover.jpeg"
+                : clubModal.detailsComplets?.images?.[0] || "/images/club/default-cover.jpg"
+            }
             alt="" 
             style={{ display: 'none' }}
-            onLoad={() => setImageLoaded(true)}
+            onLoad={() => {
+              console.log(`Image chargée avec succès pour ${clubModal.nom}`);
+              setImageLoaded(true);
+            }}
             onError={() => {
-              console.log('Erreur: Image coveracm.jpg non trouvée');
+              const imagePath = clubModal.nom === "ESPRIT Club ACM" 
+                ? "/images/club/acm/coveracm.jpg"
+                : clubModal.nom === "GDG on Campus ESPRIT" 
+                ? "/images/club/GDGoC/cover.jpeg"
+                : clubModal.detailsComplets?.images?.[0];
+              console.log(`Erreur: Image de couverture non trouvée pour ${clubModal.nom}`);
+              console.log(`Chemin testé: ${imagePath}`);
               setImageLoaded(false);
             }}
           />
@@ -541,7 +614,13 @@ export default function ClubsPage() {
             className="absolute inset-0"
             style={{
               background: imageLoaded 
-                ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/images/club/acm/coveracm.jpg') center/cover no-repeat`
+                ? `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('${
+                    clubModal.nom === "ESPRIT Club ACM" 
+                      ? "/images/club/acm/coveracm.jpg"
+                      : clubModal.nom === "GDG on Campus ESPRIT" 
+                      ? "/images/club/GDGoC/cover.jpeg"
+                      : clubModal.detailsComplets?.images?.[0] || ""
+                  }') center/cover no-repeat`
                 : 'linear-gradient(135deg, #059669 0%, #047857 100%)'
             }}
           ></div>
@@ -576,16 +655,28 @@ export default function ClubsPage() {
                       }}
                     />
                     <div className="w-full h-full bg-gradient-to-br from-green-500 to-green-700 rounded-lg flex items-center justify-center text-white font-bold text-lg overflow-hidden" style={{display: 'none'}}>
-                      <img 
-                        src="/images/club/acm/logo.jpg" 
-                        alt="ACM Logo"
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'block';
-                        }}
-                      />
-                      <span style={{display: 'none'}}>ACM</span>
+                      {clubModal.nom === "ESPRIT Club ACM" ? (
+                        <img 
+                          src="/images/club/acm/logo.jpg" 
+                          alt="ACM Logo"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'block';
+                          }}
+                        />
+                      ) : clubModal.nom === "GDG on Campus ESPRIT" ? (
+                        <img 
+                          src="/images/club/GDGoC/logo.jpg" 
+                          alt="GDG Logo"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'block';
+                          }}
+                        />
+                      ) : null}
+                      <span style={{display: 'none'}}>{clubModal.nom === "ESPRIT Club ACM" ? "ACM" : clubModal.nom === "GDG on Campus ESPRIT" ? "GDG" : clubModal.nom.substring(0, 3)}</span>
                     </div>
                   </div>
                 ))}
@@ -655,6 +746,23 @@ export default function ClubsPage() {
                   ))}
                 </div>
               </div>
+
+              {/* Bénéfices (pour GDG seulement) */}
+              {clubModal.detailsComplets.benefices && (
+                <div className="mb-6 bg-blue-50 p-4 rounded-lg">
+                  <h3 className="text-xl font-semibold mb-3 text-blue-800 flex items-center">
+                    <Trophy className="w-5 h-5 mr-2" />
+                    Bénéfices d'être Membre
+                  </h3>
+                  <div className="grid md:grid-cols-2 gap-2">
+                    {clubModal.detailsComplets.benefices.map((benefice, index) => (
+                      <div key={index} className="bg-white p-3 rounded-lg text-center border border-blue-200">
+                        <span className="text-blue-700 font-medium">{benefice}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Actions */}
               <div className="flex gap-4 pt-4 border-t">

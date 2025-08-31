@@ -14,7 +14,7 @@ import Homee from './pages/homee'; // ← ce fichier
 function App() {
   return (
     <Routes>
-        <Route path="/" element={<Homee />} />
+        <Route path="/" element={<Home />} />
 
         {   /*   <Route path="/" element={<Home />} />
         */}

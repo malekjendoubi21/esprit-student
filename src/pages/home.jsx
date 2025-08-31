@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
-import { ChevronRight, Calendar, Users, MapPin, Phone, Mail, Award, X, Menu, ChevronDown } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Calendar, Users, MapPin, Phone, Mail, Award, X, Menu, ChevronDown } from 'lucide-react';
 
 export default function HomePage() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
@@ -27,11 +27,15 @@ export default function HomePage() {
   }, [showContactCard]);
   
   const integrationPhotos = [
-    { id: 1, title: "Cérémonie d'Ouverture", description: "Accueil des nouveaux étudiants" },
-    { id: 2, title: "Activités de Team Building", description: "Jeux et défis en équipe" },
-    { id: 3, title: "Présentation des Clubs", description: "Découverte des clubs étudiants" },
-    { id: 4, title: "Soirée de Gala", description: "Événement de clôture festif" },
-    { id: 5, title: "Moments de Convivialité", description: "Échanges entre étudiants" }
+    { id: 1, title: "Plan de Mois d'Intégration", description: "Organisation et planification des activités" },
+    { id: 2, title: "Team Building", description: "Menu festif africain" },
+    { id: 3, title: "Team Building", description: "Renforcement des liens entre étudiants" },
+    { id: 4, title: "Journée Culinaire", description: "Découverte des plats africains" },
+    { id: 5, title: "Journée Sportive", description: "Compétitions et activités sportives" },
+    { id: 6, title: "Jeux", description: "Activités ludiques et divertissantes" },
+    { id: 7, title: "Jeux", description: "Moments de détente et de fun" },
+    { id: 8, title: "Soirée", description: "Événement festif en soirée" },
+    { id: 9, title: "Soirée", description: "Célébration et ambiance conviviale" }
   ];
 
   const openPhotoModal = (photo) => {
@@ -41,6 +45,39 @@ export default function HomePage() {
   const closePhotoModal = () => {
     setSelectedPhoto(null);
   };
+
+  const navigatePhoto = (direction) => {
+    const currentIndex = integrationPhotos.findIndex(photo => photo.id === selectedPhoto.id);
+    let newIndex;
+    
+    if (direction === 'next') {
+      newIndex = currentIndex === integrationPhotos.length - 1 ? 0 : currentIndex + 1;
+    } else {
+      newIndex = currentIndex === 0 ? integrationPhotos.length - 1 : currentIndex - 1;
+    }
+    
+    setSelectedPhoto(integrationPhotos[newIndex]);
+  };
+
+  const handleKeyPress = (e) => {
+    if (selectedPhoto) {
+      if (e.key === 'ArrowRight') {
+        navigatePhoto('next');
+      } else if (e.key === 'ArrowLeft') {
+        navigatePhoto('prev');
+      } else if (e.key === 'Escape') {
+        closePhotoModal();
+      }
+    }
+  };
+
+  // Ajouter l'écouteur d'événements pour les touches du clavier
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyPress);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [selectedPhoto]);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Modern Header */}
@@ -360,12 +397,28 @@ export default function HomePage() {
           {/* Modal pour voir les photos en grand */}
           {selectedPhoto && (
             <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4" onClick={closePhotoModal}>
-              <div className="relative max-w-4xl max-h-full">
+              <div className="relative max-w-4xl max-h-full" onClick={(e) => e.stopPropagation()}>
                 <button 
                   onClick={closePhotoModal}
                   className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors z-10"
                 >
                   <X className="w-8 h-8" />
+                </button>
+                
+                {/* Flèche gauche */}
+                <button
+                  onClick={() => navigatePhoto('prev')}
+                  className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-200 z-10 backdrop-blur-sm"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+
+                {/* Flèche droite */}
+                <button
+                  onClick={() => navigatePhoto('next')}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-3 rounded-full transition-all duration-200 z-10 backdrop-blur-sm"
+                >
+                  <ChevronRight className="w-6 h-6" />
                 </button>
                 
                 <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
@@ -381,9 +434,14 @@ export default function HomePage() {
                   <div className="p-6 bg-white">
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">{selectedPhoto.title}</h3>
                     <p className="text-gray-600 mb-4">{selectedPhoto.description}</p>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      <span>Mois d'Intégration 2024</span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center text-sm text-gray-500">
+                        <Calendar className="w-4 h-4 mr-2" />
+                        <span>Mois d'Intégration 2024</span>
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {integrationPhotos.findIndex(photo => photo.id === selectedPhoto.id) + 1} / {integrationPhotos.length}
+                      </div>
                     </div>
                   </div>
                 </div>
