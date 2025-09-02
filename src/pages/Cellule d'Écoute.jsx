@@ -31,10 +31,10 @@ export default function CelluleEcoutePage() {
       <header className="relative bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Button 
-              variant="ghost" 
-              onClick={() => window.history.back()}
-              className="flex items-center text-gray-600 hover:text-blue-600"
+            <Button
+                variant="ghost"
+                onClick={() => navigate('/home')}
+                className="flex items-center text-gray-600 hover:text-blue-600"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Retour
