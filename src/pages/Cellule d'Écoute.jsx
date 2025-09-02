@@ -2,14 +2,14 @@ import React, {useEffect, useRef, useState} from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
 import {Heart, Phone, Mail, Clock, Shield, Users, ArrowLeft, MapPin, Award, X} from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 
 
 export default function CelluleEcoutePage() {
   const [showContactCard, setShowContactCard] = useState(false);
   const contactCardRef = useRef(null);
-
-// Gérer le clic en dehors de la card
+  const navigate = useNavigate();
+  // Gérer le clic en dehors de la card
   useEffect(() => {
     function handleClickOutside(event) {
       if (contactCardRef.current && !contactCardRef.current.contains(event.target)) {
