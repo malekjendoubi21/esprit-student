@@ -51,8 +51,27 @@ export default function EventsPage() {
         limit: 50
       };
       
+      console.log('Requesting events with params:', params);
       const eventsData = await eventService.getEvents(params);
-      setEvents(eventsData?.data?.events || eventsData?.events || []);
+      console.log('Events data:', eventsData); // Debug log
+      
+      // Handle different API response formats
+      let eventsArray = [];
+      if (eventsData?.data?.events) {
+        eventsArray = eventsData.data.events;
+      } else if (eventsData?.events) {
+        eventsArray = eventsData.events;
+      } else if (Array.isArray(eventsData)) {
+        eventsArray = eventsData;
+      }
+      
+      console.log(`Processed ${eventsArray.length} events`);
+      
+      if (eventsArray.length === 0 && !error) {
+        console.log('No events found, but no error reported');
+      }
+      
+      setEvents(eventsArray);
       
     } catch (error) {
       console.error('Erreur lors du chargement des événements:', error);
@@ -64,6 +83,11 @@ export default function EventsPage() {
 
   // Filtrer les événements
   const eventsFiltres = events.filter(event => {
+    // Check if event has required properties
+    if (!event || !event.titre) {
+      return false;
+    }
+    
     // Filtre par recherche
     if (recherche && !event.titre.toLowerCase().includes(recherche.toLowerCase())) {
       return false;
@@ -73,7 +97,9 @@ export default function EventsPage() {
     if (filtreClub !== 'Tous') {
       const clubName = typeof event.club === 'string' 
         ? event.club 
-        : event.club?.nom || '';
+        : event.club?.nom || 
+          (event.clubId && typeof event.clubId === 'object' ? event.clubId.nom : '');
+          
       if (clubName !== filtreClub) {
         return false;
       }
@@ -84,11 +110,17 @@ export default function EventsPage() {
 
   // Obtenir les noms des clubs uniques
   const clubNames = ['Tous', ...new Set(
-    events.map(event => {
-      return typeof event.club === 'string' 
-        ? event.club 
-        : event.club?.nom || 'Club inconnu';
-    }).filter(Boolean)
+    events.filter(event => event) // Filter out undefined or null events
+      .map(event => {
+        if (typeof event.club === 'string') 
+          return event.club;
+        else if (event.club?.nom) 
+          return event.club.nom;
+        else if (event.clubId && typeof event.clubId === 'object')
+          return event.clubId.nom;
+        else
+          return 'Club inconnu';
+      }).filter(Boolean)
   )];
 
   const formatDate = (dateString) => {
@@ -358,14 +390,20 @@ export default function EventsPage() {
                         <span className="text-xs font-medium text-green-600">
                           {typeof event.club === 'string' 
                             ? event.club.substring(0, 2)
-                            : event.club?.nom?.substring(0, 2) || 'CL'
+                            : event.club?.nom?.substring(0, 2) || 
+                              (event.clubId && typeof event.clubId === 'object' 
+                                ? event.clubId.nom?.substring(0, 2) || 'CL'
+                                : 'CL')
                           }
                         </span>
                       </div>
                       <span className="text-sm text-gray-600">
                         {typeof event.club === 'string' 
                           ? event.club 
-                          : event.club?.nom || 'Club inconnu'
+                          : event.club?.nom || 
+                            (event.clubId && typeof event.clubId === 'object' 
+                              ? event.clubId.nom || 'Club inconnu'
+                              : 'Club inconnu')
                         }
                       </span>
                     </div>

@@ -88,10 +88,32 @@ export default function ClubDetailPage() {
       setLoading(true);
       setError('');
       
+      console.log('Fetching club details for ID:', id);
+      
+      // Vérifier d'abord le statut du club pour le debugging
+      try {
+        const statusCheck = await clubService.checkClubStatus(id);
+        console.log('Club status check:', statusCheck);
+        
+        if (statusCheck?.data?.isAccessiblePublicly === false) {
+          throw new Error(`Club non accessible: ${statusCheck?.data?.message || 'Statut ou validation incorrects'}`);
+        }
+      } catch (statusError) {
+        console.warn('Erreur lors de la vérification du statut:', statusError);
+        // Continuer quand même pour essayer de charger le club
+      }
+      
       // Charger les détails du club
       const clubData = await clubService.getClubById(id);
       console.log('Club data received:', clubData);
+      
+      if (!clubData || (!clubData.data && !clubData.nom)) {
+        console.error('Invalid club data received:', clubData);
+        throw new Error('Données du club invalides ou vides');
+      }
+      
       const clubInfo = clubData?.data || clubData;
+      console.log('Club info processed:', clubInfo);
       console.log('Images disponibles:', {
         imageCouverture: clubInfo?.imageCouverture,
         detailsComplets_imageCouverture: clubInfo?.detailsComplets?.imageCouverture,
@@ -115,10 +137,27 @@ export default function ClubDetailPage() {
       setClub(clubInfo);
       
       // Charger les événements récents du club
-      const eventsData = await eventService.getClubEvents(id, { limit: 5 });
-      console.log('Events data received:', eventsData);
-      const eventsList = eventsData?.data?.events || eventsData?.events || [];
-      setEvents(eventsList);
+      try {
+        console.log('Fetching events for club:', id);
+        const eventsData = await eventService.getClubEvents(id, { limit: 5 });
+        console.log('Events data received:', eventsData);
+        
+        // Handle different response formats
+        let eventsList = [];
+        if (eventsData?.success) {
+          eventsList = eventsData.data || [];
+        } else if (Array.isArray(eventsData?.data)) {
+          eventsList = eventsData.data;
+        } else if (Array.isArray(eventsData)) {
+          eventsList = eventsData;
+        }
+        
+        console.log('Processed events list:', eventsList);
+        setEvents(eventsList);
+      } catch (eventsError) {
+        console.error('Error loading club events:', eventsError);
+        setEvents([]); // Set empty array on error to prevent UI issues
+      }
       
     } catch (error) {
       console.error('Erreur lors du chargement:', error);
@@ -145,6 +184,47 @@ export default function ClubDetailPage() {
         <div className="text-center">
           <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
             <p className="text-red-600">{error || 'Club non trouvé'}</p>
+            
+            {/* Afficher le statut du club pour debugging */}
+            <div className="mt-4 p-4 bg-gray-100 rounded-lg text-left">
+              <h3 className="font-medium text-gray-700 mb-2">Informations de débogage:</h3>
+              <p className="text-sm text-gray-600">
+                ID du club: {id}
+              </p>
+              <div className="mt-4 flex flex-col gap-2">
+                <Button 
+                  onClick={async () => {
+                    try {
+                      const status = await clubService.checkClubStatus(id);
+                      alert(`Statut: ${JSON.stringify(status.data, null, 2)}`);
+                    } catch (err) {
+                      alert(`Erreur: ${err.message}`);
+                    }
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
+                >
+                  Vérifier le statut
+                </Button>
+                
+                <Button 
+                  onClick={async () => {
+                    try {
+                      if (window.confirm('Voulez-vous activer ce club?')) {
+                        await clubService.updateClubStatus(id, { statut: 'actif', valide: true });
+                        alert('Club activé avec succès!');
+                        window.location.reload();
+                      }
+                    } catch (err) {
+                      alert(`Erreur: ${err.message}`);
+                    }
+                  }}
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                >
+                  Activer ce club
+                </Button>
+              </div>
+            </div>
+            
             <Button 
               onClick={() => navigate('/clubs')}
               className="mt-4 bg-green-600 hover:bg-green-700 text-white"
@@ -677,129 +757,93 @@ export default function ClubDetailPage() {
             {/* Contact et Email */}
             <div className="text-center md:text-left">
               <h3 className="text-xl font-bold mb-4">Contactez-nous</h3>
-              {(club.contact?.email || club.email) && (
-                <div className="flex items-center justify-center md:justify-start mb-2">
+              <div className="space-y-2">
+                <div className="flex items-center justify-center md:justify-start">
                   <Mail className="w-5 h-5 mr-2" />
-                  <a 
-                    href={`mailto:${club.contact?.email || club.email}`}
-                    className="hover:text-green-200 transition-colors"
-                  >
-                    {club.contact?.email || club.email}
-                  </a>
+                  <span>esprit-club-acm@esprit.tn</span>
                 </div>
-              )}
-              {(club.contact?.telephone || club.president?.telephone) && (
                 <div className="flex items-center justify-center md:justify-start">
                   <Phone className="w-5 h-5 mr-2" />
-                  <span>{club.contact?.telephone || club.president?.telephone}</span>
+                  <span>+21696794608</span>
                 </div>
-              )}
+              </div>
             </div>
 
             {/* Réseaux Sociaux */}
             <div className="text-center">
               <h3 className="text-xl font-bold mb-4">Suivez-nous</h3>
               <div className="flex justify-center space-x-4">
-                {club.reseauxSociaux?.facebook && (
-                  <a
-                    href={club.reseauxSociaux.facebook}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all transform hover:scale-110"
-                    title="Facebook"
-                  >
-                    <Facebook className="w-5 h-5" />
-                  </a>
-                )}
-                {club.reseauxSociaux?.instagram && (
-                  <a
-                    href={club.reseauxSociaux.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all transform hover:scale-110"
-                    title="Instagram"
-                  >
-                    <Instagram className="w-5 h-5" />
-                  </a>
-                )}
-                {club.reseauxSociaux?.linkedin && (
-                  <a
-                    href={club.reseauxSociaux.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all transform hover:scale-110"
-                    title="LinkedIn"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                )}
-                {club.reseauxSociaux?.twitter && (
-                  <a
-                    href={club.reseauxSociaux.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all transform hover:scale-110"
-                    title="Twitter"
-                  >
-                    <Twitter className="w-5 h-5" />
-                  </a>
-                )}
-                {club.reseauxSociaux?.youtube && (
-                  <a
-                    href={club.reseauxSociaux.youtube}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all transform hover:scale-110"
-                    title="YouTube"
-                  >
-                    <Youtube className="w-5 h-5" />
-                  </a>
-                )}
+                {/* Toujours afficher les 5 cercles comme dans l'image */}
+                <a
+                  href={club.reseauxSociaux?.facebook || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all transform"
+                  title="Facebook"
+                >
+                  <i className="fab fa-facebook text-blue-600 text-xl"></i>
+                </a>
+                
+                <a
+                  href={club.reseauxSociaux?.instagram || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all transform"
+                  title="Instagram"
+                >
+                  <i className="fab fa-instagram text-pink-600 text-xl"></i>
+                </a>
+                
+                <a
+                  href={club.reseauxSociaux?.twitter || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all transform"
+                  title="Twitter"
+                >
+                  <i className="fab fa-twitter text-blue-400 text-xl"></i>
+                </a>
+                
+                <a
+                  href={club.reseauxSociaux?.linkedin || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all transform"
+                  title="LinkedIn"
+                >
+                  <i className="fab fa-linkedin text-blue-700 text-xl"></i>
+                </a>
+                
+                <a
+                  href={club.reseauxSociaux?.youtube || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 bg-white rounded-full flex items-center justify-center hover:scale-110 transition-all transform"
+                  title="YouTube"
+                >
+                  <i className="fab fa-youtube text-red-600 text-xl"></i>
+                </a>
               </div>
-              
-              {/* Message si aucun réseau social */}
-              {!club.reseauxSociaux?.facebook && !club.reseauxSociaux?.instagram && 
-               !club.reseauxSociaux?.linkedin && !club.reseauxSociaux?.twitter && 
-               !club.reseauxSociaux?.youtube && (
-                <p className="text-green-200 text-sm">Réseaux sociaux à venir...</p>
-              )}
             </div>
 
             {/* Bouton Rejoindre */}
             <div className="text-center md:text-right">
               <h3 className="text-xl font-bold mb-4">Rejoignez-nous !</h3>
-              {club.lienRecrutement ? (
-                <a
-                  href={club.lienRecrutement}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-6 py-3 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-50 transition-colors transform hover:scale-105"
-                >
-                  <Users className="w-5 h-5 mr-2" />
-                  Rejoignez-nous
-                  <ExternalLink className="w-4 h-4 ml-2" />
-                </a>
-              ) : (
-                <div className="space-y-2">
-                  <Button 
-                    className="bg-white text-green-700 hover:bg-green-50 font-semibold px-6 py-3"
-                    onClick={() => window.location.href = `mailto:${club.contact?.email || club.email}?subject=Candidature pour rejoindre ${club.nom}`}
-                  >
-                    <Mail className="w-5 h-5 mr-2" />
-                    Contactez-nous
-                  </Button>
-                  <p className="text-green-200 text-sm">
-                    Envoyez-nous un email pour plus d'informations
-                  </p>
-                </div>
-              )}
+              <a
+                href="/backoffice/login"
+                className="inline-flex items-center px-6 py-3 bg-white text-green-700 font-semibold rounded-lg hover:bg-green-50 transition-colors transform hover:scale-105"
+              >
+                <Users className="w-5 h-5 mr-2" />
+                Rejoignez-nous
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </a>
             </div>
           </div>
           
           {/* Ligne de séparation et info */}
           <div className="mt-8 pt-6 border-t border-green-400 border-opacity-30 text-center">
             <p className="text-green-200 text-sm">
-              © {new Date().getFullYear()} {club.nom} - École Supérieure Privée d'Ingénierie et de Technologies ESPRIT
+              © 2025 ACM Esprit Student Chapter - École Supérieure Privée d'Ingénierie et de Technologies ESPRIT
             </p>
           </div>
         </div>

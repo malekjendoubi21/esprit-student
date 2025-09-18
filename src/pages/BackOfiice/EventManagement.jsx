@@ -33,19 +33,46 @@ const EventManagement = () => {
             setLoading(true);
             setError('');
 
-            const response = await eventService.getEvents({
+            const params = {
                 page: currentPage,
                 limit: 10,
                 search: searchTerm,
                 statut: statusFilter
-            });
+            };
+            
+            console.log('Requesting admin events with params:', params);
+            const response = await eventService.getAllEvents(params);
 
-            if (response.success) {
-                setEvents(response.data.events);
-                setTotalPages(response.data.totalPages);
+            console.log('BackOffice events response:', response); // Debug log
+
+            // Handle different API response formats
+            if (response) {
+                let eventsArray = [];
+                let totalPagesCount = 1;
+                
+                if (response.success && response.data?.events) {
+                    eventsArray = response.data.events;
+                    totalPagesCount = response.data.pagination?.total || 1;
+                } else if (Array.isArray(response.data)) {
+                    eventsArray = response.data;
+                } else if (Array.isArray(response)) {
+                    eventsArray = response;
+                }
+                
+                console.log(`Processed ${eventsArray.length} events for admin view`);
+                
+                if (eventsArray.length === 0) {
+                    console.log('No events found for admin view, using filter:', params);
+                }
+                
+                setEvents(eventsArray);
+                setTotalPages(totalPagesCount);
+            } else {
+                setError('Réponse invalide du serveur');
             }
         } catch (err) {
-            setError('Erreur lors du chargement des événements');
+            console.error('Erreur lors du chargement des événements:', err);
+            setError('Erreur lors du chargement des événements: ' + (err.message || 'Unknown error'));
         } finally {
             setLoading(false);
         }
@@ -53,15 +80,19 @@ const EventManagement = () => {
 
     const handleApproval = async (eventId, statut, commentaire = '') => {
         try {
-            const response = await adminService.updateEventStatus(eventId, statut, commentaire);
-            if (response.success) {
+            const response = await eventService.validateEvent(eventId, statut, commentaire);
+            
+            if (response && (response.success || response.data)) {
                 setSuccess(`Événement ${statut === 'valide' ? 'approuvé' : 'rejeté'} avec succès`);
                 setShowApprovalModal(false);
                 setSelectedEvent(null);
                 setApprovalComment('');
                 loadEvents();
+            } else {
+                throw new Error('Réponse invalide du serveur');
             }
         } catch (err) {
+            console.error('Erreur lors de la mise à jour du statut:', err);
             setError(err.message || 'Erreur lors de la mise à jour du statut');
         }
     };

@@ -29,7 +29,7 @@ const ClubStats = ({ clubId }) => {
 
     const fetchStats = async () => {
         try {
-            const response = await fetch(`https://esprit-student-backend.onrender.com/api/clubs/my/stats`, {
+            const response = await fetch(`${API_BASE_URL}/clubs/my/stats`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                 }
@@ -45,7 +45,7 @@ const ClubStats = ({ clubId }) => {
 
     const fetchRecentEvents = async () => {
         try {
-            const response = await fetch(`https://esprit-student-backend.onrender.com/api/events/my/events?limit=5`, {
+            const response = await fetch(`${API_BASE_URL}/events/my/events?limit=5`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
                 }

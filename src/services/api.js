@@ -40,16 +40,29 @@ class ApiService {
         };
 
         try {
+            console.log(`[ApiService] Request to: ${url}`, config);
             const response = await fetch(url, config);
             
-            const data = await response.json();
+            console.log(`[ApiService] Response status from ${endpoint}:`, response.status);
+            
+            // Try to parse JSON, but handle potential errors
+            let data;
+            try {
+                data = await response.json();
+            } catch (parseError) {
+                console.error(`[ApiService] JSON parse error for ${endpoint}:`, parseError);
+                throw new Error(`Erreur de format de réponse: ${parseError.message}`);
+            }
+
+            console.log(`[ApiService] Response data from ${endpoint}:`, data);
 
             if (!response.ok) {
-                throw new Error(data.message || 'Erreur réseau');
+                throw new Error(data.message || `Erreur HTTP: ${response.status}`);
             }
 
             return data;
         } catch (error) {
+            console.error(`[ApiService] Request error for ${endpoint}:`, error);
             throw error;
         }
     }
@@ -169,7 +182,28 @@ export const clubService = {
 
     // Obtenir un club par ID publiquement
     async getClubById(id) {
-        return apiService.get(`/clubs/${id}/public`);
+        console.log(`[clubService] Fetching club with ID: ${id}`);
+        try {
+            const response = await apiService.get(`/clubs/${id}/public`);
+            console.log(`[clubService] Club data received:`, response);
+            return response;
+        } catch (error) {
+            console.error(`[clubService] Error fetching club ${id}:`, error);
+            throw error;
+        }
+    },
+    
+    // Pour le debugging - vérifier le statut d'un club
+    async checkClubStatus(id) {
+        console.log(`[clubService] Checking status for club ID: ${id}`);
+        try {
+            const response = await apiService.get(`/clubs/${id}/status`);
+            console.log(`[clubService] Club status:`, response);
+            return response;
+        } catch (error) {
+            console.error(`[clubService] Error checking club status ${id}:`, error);
+            throw error;
+        }
     },
 
     // Créer un club
@@ -195,6 +229,11 @@ export const clubService = {
     // Mettre à jour un club (admin)
     async updateClub(id, clubData) {
         return apiService.put(`/clubs/${id}/profile`, clubData);
+    },
+    
+    // Mettre à jour le statut d'un club (admin)
+    async updateClubStatus(id, statusData) {
+        return apiService.put(`/clubs/${id}/status`, statusData);
     },
 
     // Supprimer un club
@@ -233,6 +272,11 @@ export const eventService = {
     // Obtenir tous les événements publiquement (route publique)
     async getEvents(params = {}) {
         return apiService.get('/events/public', params);
+    },
+    
+    // Obtenir tous les événements (admin)
+    async getAllEvents(params = {}) {
+        return apiService.get('/events', params);
     },
 
     // Obtenir mes événements (club)

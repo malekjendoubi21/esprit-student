@@ -144,6 +144,26 @@ const ClubManagement = () => {
             setError(err.message || 'Erreur lors de la modification');
         }
     };
+    
+    const handleUpdateStatus = async (clubId, newStatus, validation) => {
+        try {
+            setLoading(true);
+            const response = await clubService.updateClubStatus(clubId, {
+                statut: newStatus,
+                valide: validation
+            });
+            
+            if (response.success) {
+                setSuccess(`Statut du club mis à jour avec succès`);
+                loadClubs();
+            }
+        } catch (err) {
+            console.error('Erreur lors de la mise à jour du statut:', err);
+            setError(err.message || 'Erreur lors de la mise à jour du statut');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleDelete = async () => {
         try {
@@ -291,14 +311,20 @@ const ClubManagement = () => {
                                         <div className="ml-3">
                                             <h3 className="text-lg font-medium text-gray-900">{club.nom}</h3>
                                             <p className="text-sm text-gray-500">{club.type}</p>
+                                            <div className="flex items-center mt-1">
+                                                <StatusBadge
+                                                    status={club.statut}
+                                                    color={getStatusColor(club.statut)}
+                                                >
+                                                    {getStatusLabel(club.statut)}
+                                                </StatusBadge>
+                                                
+                                                <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${club.valide ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                                    {club.valide ? 'Validé' : 'Non validé'}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                    <StatusBadge
-                                        status={club.statut}
-                                        color={getStatusColor(club.statut)}
-                                    >
-                                        {getStatusLabel(club.statut)}
-                                    </StatusBadge>
                                 </div>
 
                                 <p className="mt-3 text-sm text-gray-600 line-clamp-3">
@@ -325,21 +351,57 @@ const ClubManagement = () => {
                                     )}
                                 </div>
 
-                                <div className="mt-4 flex justify-between space-x-2">
-                                    <div className="flex space-x-2">
+                                <div className="mt-4 flex flex-col space-y-2">
+                                    <div className="flex justify-between space-x-2">
+                                        <div className="flex space-x-2">
+                                            <button
+                                                onClick={() => openEditModal(club)}
+                                                className="px-3 py-1 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                                            >
+                                                Modifier
+                                            </button>
+                                        </div>
                                         <button
-                                            onClick={() => openEditModal(club)}
-                                            className="px-3 py-1 text-sm border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                                            onClick={() => openDeleteModal(club)}
+                                            className="px-3 py-1 text-sm border border-red-300 rounded-md text-red-600 hover:bg-red-50"
                                         >
-                                            Modifier
+                                            Supprimer
                                         </button>
                                     </div>
-                                    <button
-                                        onClick={() => openDeleteModal(club)}
-                                        className="px-3 py-1 text-sm border border-red-300 rounded-md text-red-600 hover:bg-red-50"
-                                    >
-                                        Supprimer
-                                    </button>
+                                    
+                                    {/* Status actions */}
+                                    <div className="w-full pt-2 flex flex-wrap gap-2">
+                                        {!club.valide && (
+                                            <button
+                                                onClick={() => handleUpdateStatus(club._id, club.statut, true)}
+                                                className="px-3 py-1 text-sm text-green-600 bg-green-50 hover:bg-green-100 rounded"
+                                                title="Rendre le club visible publiquement"
+                                            >
+                                                Valider
+                                            </button>
+                                        )}
+                                        
+                                        {club.statut !== 'actif' && (
+                                            <button
+                                                onClick={() => handleUpdateStatus(club._id, 'actif', club.valide)}
+                                                className="px-3 py-1 text-sm text-blue-600 bg-blue-50 hover:bg-blue-100 rounded"
+                                                title="Changer le statut à actif"
+                                            >
+                                                Activer
+                                            </button>
+                                        )}
+                                        
+                                        {/* Quick action to make visible and active */}
+                                        {(!club.valide || club.statut !== 'actif') && (
+                                            <button
+                                                onClick={() => handleUpdateStatus(club._id, 'actif', true)}
+                                                className="px-3 py-1 text-sm text-white bg-green-600 hover:bg-green-700 rounded"
+                                                title="Rendre le club actif et visible publiquement"
+                                            >
+                                                Activer et valider
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}
