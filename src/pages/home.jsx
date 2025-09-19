@@ -1,13 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button.jsx"
 import { Card, CardContent } from '@/components/ui/card.jsx';
-import { ChevronRight, ChevronLeft, Calendar, Users, MapPin, Phone, Mail, Award, X, Menu, ChevronDown } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Calendar, Users, MapPin, Phone, Mail, Award, X, Menu, ChevronDown, Clock, Star } from 'lucide-react';
+import { eventService } from '../services/api.js';
 
 export default function HomePage() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [showContactCard, setShowContactCard] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [events, setEvents] = useState([]); // Commence vide, sera rempli par l'API ou fallback
+  const [eventsLoading, setEventsLoading] = useState(true);
+  const [eventsError, setEventsError] = useState(null);
   const contactCardRef = useRef(null);
+
+  // Événements de démonstration en cas d'échec de l'API
+  const fallbackEvents = [
+    {
+      _id: 'demo-1',
+      title: 'Journée Portes Ouvertes',
+      description: 'Découvrez ESPRIT et ses formations lors de notre journée portes ouvertes. Rencontrez nos étudiants et professeurs.',
+      date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // Dans 7 jours
+      time: '09:00 - 17:00',
+      location: 'Campus ESPRIT Ariana',
+      type: 'Événement institutionnel',
+      club: { name: 'Administration ESPRIT' }
+    },
+    {
+      _id: 'demo-2',
+      title: 'Hackathon Tech Innovation',
+      description: 'Participez à notre hackathon de 48h pour développer des solutions innovantes aux défis technologiques actuels.',
+      date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // Dans 14 jours
+      time: '18:00',
+      location: 'Lab Innovation ESPRIT',
+      type: 'Compétition',
+      club: { name: 'ESPRIT Club ACM' }
+    },
+    {
+      _id: 'demo-3',
+      title: 'Conférence IA & Machine Learning',
+      description: 'Conférence sur les dernières avancées en intelligence artificielle avec des experts du domaine.',
+      date: new Date(Date.now() + 21 * 24 * 60 * 60 * 1000), // Dans 21 jours
+      time: '14:00 - 16:00',
+      location: 'Amphithéâtre A',
+      type: 'Conférence',
+      club: { name: 'ESPRIT Club YouRobot' }
+    }
+  ];
 
   // Gérer le clic en dehors de la card
   useEffect(() => {
@@ -25,6 +63,88 @@ export default function HomePage() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showContactCard]);
+
+  // Récupérer les événements à venir
+  useEffect(() => {
+    const fetchUpcomingEvents = async () => {
+      try {
+        setEventsLoading(true);
+        setEventsError(null);
+        
+        // Timeout pour éviter d'attendre trop longtemps
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Timeout')), 5000)
+        );
+        
+        // Récupérer les événements publics avec un filtre pour les événements à venir
+        const apiPromise = eventService.getEvents({
+          limit: 6, // Limiter à 6 événements
+          status: 'active',
+          upcoming: true
+        });
+        
+        const response = await Promise.race([apiPromise, timeoutPromise]);
+        
+        console.log('Response complète:', response);
+        
+        if (response && response.success) {
+          // Gérer différentes structures de réponse possibles
+          let eventsData = [];
+          
+          if (Array.isArray(response.data)) {
+            eventsData = response.data;
+          } else if (response.data && Array.isArray(response.data.events)) {
+            eventsData = response.data.events;
+          } else if (response.data && response.data.data && Array.isArray(response.data.data)) {
+            eventsData = response.data.data;
+          } else if (Array.isArray(response.events)) {
+            eventsData = response.events;
+          } else {
+            console.log('Structure de réponse inattendue:', response);
+            eventsData = [];
+          }
+          
+          // Filtrer les événements pour ne garder que ceux qui sont à venir
+          const upcomingEvents = eventsData.filter(event => {
+            if (!event.date) return false;
+            const eventDate = new Date(event.date);
+            const now = new Date();
+            return eventDate > now;
+          }).sort((a, b) => new Date(a.date) - new Date(b.date));
+          
+          // Si on a des événements depuis l'API, les utiliser, sinon utiliser les événements de démonstration
+          if (upcomingEvents.length > 0) {
+            console.log('Événements trouvés via API:', upcomingEvents.length);
+            setEvents(upcomingEvents);
+          } else {
+            console.log('Aucun événement à venir trouvé via API, utilisation des événements de démonstration');
+            setEvents(fallbackEvents);
+          }
+        } else {
+          console.log('Réponse non réussie, utilisation des événements de démonstration');
+          setEvents(fallbackEvents);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des événements:', error);
+        console.log('Utilisation des événements de démonstration en raison de l\'erreur');
+        // En cas d'erreur, utiliser les événements de démonstration
+        setEvents(fallbackEvents);
+        setEventsError(null); // Ne pas afficher d'erreur, utiliser les données de fallback
+      } finally {
+        setEventsLoading(false);
+      }
+    };
+
+    fetchUpcomingEvents();
+  }, []);
+
+  // Fonction de test pour forcer l'affichage des événements de démonstration
+  const loadDemoEvents = () => {
+    console.log('Chargement forcé des événements de démonstration');
+    setEvents(fallbackEvents);
+    setEventsLoading(false);
+    setEventsError(null);
+  };
   
   const integrationPhotos = [
     { id: 1, title: "Plan de Mois d'Intégration", description: "Organisation et planification des activités" },
@@ -354,6 +474,212 @@ export default function HomePage() {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+
+      {/* Section Événements à venir */}
+      <section className="py-20 bg-gradient-to-br from-purple-50 via-white to-blue-50 relative overflow-hidden">
+        {/* Background decorations */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-purple-300/30 to-blue-300/30 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-300/30 to-purple-300/30 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="relative w-full px-6">
+          <div className="text-center mb-16 max-w-5xl mx-auto">
+            <div className="inline-block bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-medium mb-4 shadow-lg">
+              🎉 Événements à venir
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+              Prochains <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Événements</span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Ne manquez aucun événement ! Découvrez les prochaines activités organisées par nos clubs et associations.
+            </p>
+            
+            {/* Bouton de test temporaire - à supprimer en production */}
+            <div className="mt-4">
+              <button 
+                onClick={loadDemoEvents}
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
+              >
+                🔧 Test: Charger événements démo
+              </button>
+            </div>
+          </div>
+
+          {/* Contenu dynamique des événements */}
+          {eventsLoading ? (
+            // État de chargement
+            <div className="max-w-7xl mx-auto">
+              <div className="flex items-center justify-center py-16">
+                <div className="text-center">
+                  <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
+                  <p className="text-gray-600 text-lg">Chargement des événements...</p>
+                </div>
+              </div>
+            </div>
+          ) : eventsError ? (
+            // État d'erreur
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center py-16">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <X className="w-8 h-8 text-red-500" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Oups ! Un problème est survenu</h3>
+                <p className="text-gray-600 mb-4">{eventsError}</p>
+                <Button 
+                  onClick={() => window.location.reload()} 
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                >
+                  Réessayer
+                </Button>
+              </div>
+            </div>
+          ) : events.length === 0 ? (
+            // Aucun événement
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center py-16">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="w-8 h-8 text-blue-500" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Aucun événement prévu</h3>
+                <p className="text-gray-600 mb-6">Restez connectés, de nouveaux événements seront bientôt annoncés !</p>
+                <Button 
+                  onClick={() => window.location.href = '/events'} 
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white"
+                >
+                  Voir tous les événements
+                </Button>
+              </div>
+            </div>
+          ) : (
+            // Affichage des événements
+            <div className="max-w-7xl mx-auto">
+              {/* Scroll horizontal sur mobile */}
+              <div className="flex overflow-x-auto scrollbar-hide pb-6 gap-6 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:gap-8 lg:overflow-visible">
+                {events.map((event, index) => {
+                  const eventDate = new Date(event.date);
+                  const now = new Date();
+                  const isToday = eventDate.toDateString() === now.toDateString();
+                  const isTomorrow = eventDate.toDateString() === new Date(now.getTime() + 86400000).toDateString();
+                  
+                  return (
+                    <Card 
+                      key={event._id || event.id || index} 
+                      className="group relative overflow-hidden bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 flex-shrink-0 w-80 lg:w-auto snap-center"
+                    >
+                      {/* Badge pour événements urgents */}
+                      {(isToday || isTomorrow) && (
+                        <div className="absolute top-4 right-4 z-10">
+                          <div className={`px-3 py-1 rounded-full text-xs font-bold text-white ${isToday ? 'bg-red-500' : 'bg-orange-500'} animate-pulse`}>
+                            {isToday ? "Aujourd'hui" : "Demain"}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Image de l'événement */}
+                      <div className="relative h-48 overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-blue-500/20 group-hover:from-purple-500/30 group-hover:to-blue-500/30 transition-all duration-500"></div>
+                        {event.image ? (
+                          <img 
+                            src={event.image} 
+                            alt={event.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            onError={(e) => {
+                              // Image par défaut en cas d'erreur
+                              e.target.src = `https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=200&fit=crop&q=80`;
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-purple-400 to-blue-500 flex items-center justify-center">
+                            <Calendar className="w-16 h-16 text-white/80" />
+                          </div>
+                        )}
+                        
+                        {/* Overlay avec le type d'événement */}
+                        <div className="absolute bottom-4 left-4">
+                          <span className="inline-block bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
+                            {event.type || 'Événement'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <CardContent className="p-6">
+                        {/* Date et heure */}
+                        <div className="flex items-center text-sm text-purple-600 mb-3">
+                          <Calendar className="w-4 h-4 mr-2" />
+                          <span className="font-medium">
+                            {eventDate.toLocaleDateString('fr-FR', { 
+                              weekday: 'long', 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })}
+                          </span>
+                        </div>
+                        
+                        {event.time && (
+                          <div className="flex items-center text-sm text-gray-500 mb-3">
+                            <Clock className="w-4 h-4 mr-2" />
+                            <span>{event.time}</span>
+                          </div>
+                        )}
+
+                        {/* Titre de l'événement */}
+                        <h3 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors duration-300 line-clamp-2">
+                          {event.title || 'Événement ESPRIT'}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
+                          {event.description || "Rejoignez-nous pour cet événement spécial organisé par nos équipes."}
+                        </p>
+
+                        {/* Lieu */}
+                        {event.location && (
+                          <div className="flex items-center text-sm text-gray-500 mb-4">
+                            <MapPin className="w-4 h-4 mr-2 flex-shrink-0" />
+                            <span className="truncate">{event.location}</span>
+                          </div>
+                        )}
+
+                        {/* Club organisateur */}
+                        {event.club && (
+                          <div className="flex items-center text-sm text-blue-600 mb-4">
+                            <Users className="w-4 h-4 mr-2" />
+                            <span className="font-medium">{typeof event.club === 'string' ? event.club : event.club.name || 'Club ESPRIT'}</span>
+                          </div>
+                        )}
+
+                        {/* Bouton d'action */}
+                        <div className="mt-6">
+                          <Button 
+                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl py-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl group-hover:scale-105" 
+                            onClick={() => window.location.href = `/events/${event._id || event.id || ''}`}
+                          >
+                            <span className="mr-2">En savoir plus</span>
+                            <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+
+              {/* Bouton pour voir tous les événements */}
+              <div className="text-center mt-12">
+                <Button 
+                  onClick={() => window.location.href = '/events'} 
+                  className="bg-white text-purple-600 border-2 border-purple-600 hover:bg-purple-600 hover:text-white rounded-xl px-8 py-3 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+                >
+                  <Calendar className="w-5 h-5 mr-2" />
+                  Voir tous les événements
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
